@@ -8,7 +8,7 @@ function Profile({ isActive = true }) {
     },
     {
       label: 'Program',
-      value: 'College: BS Information Systems | Senior High Strand: ICT/CSS',
+      value: 'College: BS Information Systems     Senior High Strand: ICT/CSS',
     },
     {
       label: 'Focus',
