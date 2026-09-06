@@ -1,16 +1,16 @@
 import { useState, useEffect } from 'react';
-import { Mail, Menu, X } from 'lucide-react';
+import { Home, User, Briefcase, Mail, UserCircle, Menu, X } from 'lucide-react';
 import GhostFibers from './GhostFibers.jsx';
 
 function Header({ activeSection, onNavigate }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
-    { id: 'home', label: 'Home' },
-    { id: 'about', label: 'About' },
-    { id: 'projects', label: 'Projects' },
-    { id: 'contact', label: 'Contact' },
-    { id: 'profile', label: 'Profile' },
+    { id: 'home', label: 'Home', icon: Home },
+    { id: 'about', label: 'About', icon: User },
+    { id: 'projects', label: 'Projects', icon: Briefcase },
+    { id: 'contact', label: 'Contact', icon: Mail },
+    { id: 'profile', label: 'Profile', icon: UserCircle },
   ];
 
   const handleNavClick = (sectionId) => {
@@ -72,22 +72,25 @@ function Header({ activeSection, onNavigate }) {
         {/* Desktop Navigation */}
         <nav className="desktop-nav" aria-label="Main Navigation">
           <ul className="nav-links">
-            {navItems.map((item, index) => (
-              <li key={item.id} className="nav-item">
-                {index > 0 && <span className="nav-separator" aria-hidden="true">|</span>}
-                <a
-                  href={`#${item.id}`}
-                  className={`nav-btn ${activeSection === item.id ? 'active' : ''}`}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(item.id);
-                  }}
-                >
-                  {item.id === 'contact' && <Mail size={14} strokeWidth={2} />}
-                  {item.label}
-                </a>
-              </li>
-            ))}
+            {navItems.map((item, index) => {
+              const IconComponent = item.icon;
+              return (
+                <li key={item.id} className="nav-item">
+                  {index > 0 && <span className="nav-separator" aria-hidden="true">|</span>}
+                  <a
+                    href={`#${item.id}`}
+                    className={`nav-btn ${activeSection === item.id ? 'active' : ''}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      handleNavClick(item.id);
+                    }}
+                  >
+                    {IconComponent && <IconComponent size={14} strokeWidth={2} />}
+                    <span>{item.label}</span>
+                  </a>
+                </li>
+              );
+            })}
           </ul>
         </nav>
       </div>
@@ -99,21 +102,24 @@ function Header({ activeSection, onNavigate }) {
         aria-label="Mobile Navigation"
       >
         <ul className="mobile-nav-links">
-          {navItems.map((item) => (
-            <li key={item.id}>
-              <a
-                href={`#${item.id}`}
-                className={`mobile-nav-btn ${activeSection === item.id ? 'active' : ''}`}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.id);
-                }}
-              >
-                {item.id === 'contact' && <Mail size={16} strokeWidth={2} />}
-                <span>{item.label}</span>
-              </a>
-            </li>
-          ))}
+          {navItems.map((item) => {
+            const IconComponent = item.icon;
+            return (
+              <li key={item.id}>
+                <a
+                  href={`#${item.id}`}
+                  className={`mobile-nav-btn ${activeSection === item.id ? 'active' : ''}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleNavClick(item.id);
+                  }}
+                >
+                  {IconComponent && <IconComponent size={16} strokeWidth={2} />}
+                  <span>{item.label}</span>
+                </a>
+              </li>
+            );
+          })}
         </ul>
       </nav>
     </header>
