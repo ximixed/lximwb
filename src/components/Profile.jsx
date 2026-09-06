@@ -8,7 +8,8 @@ function Profile({ isActive = true }) {
     },
     {
       label: 'Program',
-      value: 'BS Information Systems',
+      value: 'College: BS Information Systems',
+      value: 'High School: Information and Communication Technology Strand',
     },
     {
       label: 'Focus',
@@ -24,11 +25,11 @@ function Profile({ isActive = true }) {
     },
     {
       label: 'Core Tech',
-      value: 'HTML, CSS, JavaScript, PHP, C++',
+      value: 'HTML, CSS, JavaScript, PHP, C++, React',
     },
     {
       label: 'Specialty',
-      value: 'Web Designing & UI Layouts',
+      value: 'Web Developer / UI/UX Designer',
     },
   ];
 
