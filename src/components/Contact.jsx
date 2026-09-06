@@ -32,7 +32,12 @@ function Contact({ isActive = true }) {
 
   return (
     <section id="contact" className={`page-section ${isActive ? 'active' : ''}`}>
-      <h2>Contact Me</h2>
+      <div className="section-heading">
+        <span className="section-icon-badge">
+          <Mail size={17} strokeWidth={2} />
+        </span>
+        <h2>Contact Me</h2>
+      </div>
       <form id="contact-form" className="contact-form" onSubmit={handleSubmit}>
         <div className="field">
           <label htmlFor="name">Name</label>

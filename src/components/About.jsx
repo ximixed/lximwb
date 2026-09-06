@@ -1,18 +1,26 @@
+import { User, Smartphone } from 'lucide-react';
+import { SiHtml5, SiCss, SiJavascript, SiPhp, SiCplusplus, SiReact, SiGit } from 'react-icons/si';
+
 function About({ isActive = true }) {
   const skills = [
-    'HTML5',
-    'CSS3',
-    'JavaScript',
-    'PHP',
-    'C++',
-    'React',
-    'Responsive Design',
-    'Git',
+    { name: 'HTML5', Icon: SiHtml5, color: '#E34F26' },
+    { name: 'CSS3', Icon: SiCss, color: '#1572B6' },
+    { name: 'JavaScript', Icon: SiJavascript, color: '#F7DF1E' },
+    { name: 'PHP', Icon: SiPhp, color: '#777BB4' },
+    { name: 'C++', Icon: SiCplusplus, color: '#00599C' },
+    { name: 'React', Icon: SiReact, color: '#61DAFB' },
+    { name: 'Responsive Design', Icon: Smartphone, color: '#e2a63b' },
+    { name: 'Git', Icon: SiGit, color: '#F05032' },
   ];
 
   return (
     <section id="about" className={`page-section ${isActive ? 'active' : ''}`}>
-      <h2>About Me</h2>
+      <div className="section-heading">
+        <span className="section-icon-badge">
+          <User size={17} strokeWidth={2} />
+        </span>
+        <h2>About Me</h2>
+      </div>
       <div className="about-content">
         <p>
           I am an Information Systems student who is passionate about technology, web development, and creating digital solutions.
@@ -30,9 +38,10 @@ function About({ isActive = true }) {
         <div className="skills-section">
           <h3>Skills & Technologies</h3>
           <div className="skills-tags">
-            {skills.map((skill) => (
-              <span key={skill} className="skill-tag">
-                {skill}
+            {skills.map(({ name, Icon, color }) => (
+              <span key={name} className="skill-tag">
+                <Icon size={14} style={{ color }} aria-hidden="true" />
+                {name}
               </span>
             ))}
           </div>
