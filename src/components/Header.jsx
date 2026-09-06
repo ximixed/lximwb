@@ -1,14 +1,33 @@
-import { Mail } from 'lucide-react';
+import { useState, useEffect } from 'react';
+import { Mail, Menu, X } from 'lucide-react';
 import GhostFibers from './GhostFibers.jsx';
 
 function Header({ activeSection, onNavigate }) {
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
   const navItems = [
     { id: 'home', label: 'Home' },
-    { id: 'about', label: '| About' },
-    { id: 'projects', label: '| Projects' },
-    { id: 'contact', label: '| Contact' },
-    { id: 'profile', label: '| Profile' },
+    { id: 'about', label: 'About' },
+    { id: 'projects', label: 'Projects' },
+    { id: 'contact', label: 'Contact' },
+    { id: 'profile', label: 'Profile' },
   ];
+
+  const handleNavClick = (sectionId) => {
+    onNavigate(sectionId);
+    setMobileMenuOpen(false);
+  };
+
+  // Close mobile menu on resize to desktop
+  useEffect(() => {
+    const handleResize = () => {
+      if (window.innerWidth > 768) {
+        setMobileMenuOpen(false);
+      }
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   return (
     <header>
@@ -25,23 +44,46 @@ function Header({ activeSection, onNavigate }) {
         />
       </div>
       <div className="nav-container">
-        <div className="brand">
+        <a
+          href="#home"
+          className="brand"
+          onClick={(e) => {
+            e.preventDefault();
+            handleNavClick('home');
+          }}
+          aria-label="Go to Home"
+        >
           <img src="pic/profile.jpg" alt="Ilsim Sayon" className="profile-logo" />
           <span className="brand-name">Ilsim Sayon</span>
-        </div>
-        <nav>
+        </a>
+
+        {/* Mobile Hamburger Toggle */}
+        <button
+          type="button"
+          className="mobile-menu-toggle"
+          onClick={() => setMobileMenuOpen((prev) => !prev)}
+          aria-expanded={mobileMenuOpen}
+          aria-controls="mobile-navigation"
+          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+        >
+          {mobileMenuOpen ? <X size={22} strokeWidth={2} /> : <Menu size={22} strokeWidth={2} />}
+        </button>
+
+        {/* Desktop Navigation */}
+        <nav className="desktop-nav" aria-label="Main Navigation">
           <ul className="nav-links">
-            {navItems.map((item) => (
-              <li key={item.id}>
+            {navItems.map((item, index) => (
+              <li key={item.id} className="nav-item">
+                {index > 0 && <span className="nav-separator" aria-hidden="true">|</span>}
                 <a
                   href={`#${item.id}`}
                   className={`nav-btn ${activeSection === item.id ? 'active' : ''}`}
                   onClick={(e) => {
                     e.preventDefault();
-                    onNavigate(item.id);
+                    handleNavClick(item.id);
                   }}
                 >
-                  {item.id === 'contact' && <Mail size={15} strokeWidth={2} />}
+                  {item.id === 'contact' && <Mail size={14} strokeWidth={2} />}
                   {item.label}
                 </a>
               </li>
@@ -49,6 +91,31 @@ function Header({ activeSection, onNavigate }) {
           </ul>
         </nav>
       </div>
+
+      {/* Mobile Navigation Dropdown */}
+      <nav
+        id="mobile-navigation"
+        className={`mobile-nav ${mobileMenuOpen ? 'open' : ''}`}
+        aria-label="Mobile Navigation"
+      >
+        <ul className="mobile-nav-links">
+          {navItems.map((item) => (
+            <li key={item.id}>
+              <a
+                href={`#${item.id}`}
+                className={`mobile-nav-btn ${activeSection === item.id ? 'active' : ''}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.id);
+                }}
+              >
+                {item.id === 'contact' && <Mail size={16} strokeWidth={2} />}
+                <span>{item.label}</span>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </nav>
     </header>
   );
 }

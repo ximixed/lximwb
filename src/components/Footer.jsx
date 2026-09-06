@@ -26,12 +26,19 @@ function Footer() {
         />
       </div>
       <div className="footer-content">
-        <p>&copy; {currentYear} Ilsim Sayon. All rights reserved.</p>
+        <p className="footer-copyright">&copy; {currentYear} Ilsim Sayon. All rights reserved.</p>
         <div className="footer-links">
           {socialLinks.map(({ label, url, Icon }) => (
-            <a key={label} href={url} target="_blank" rel="noopener noreferrer">
-              <Icon size={16} />
-              {label}
+            <a
+              key={label}
+              href={url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="footer-social-link"
+              aria-label={label}
+            >
+              <Icon size={15} />
+              <span>{label}</span>
             </a>
           ))}
         </div>

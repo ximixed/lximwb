@@ -1,45 +1,60 @@
 function Profile({ isActive = true }) {
+  const profileDetails = [
+    {
+      label: 'Institution',
+      value: 'Mount Carmel College Escalante Inc.',
+      isLink: true,
+      href: 'https://mccei.edu.ph/',
+    },
+    {
+      label: 'Program',
+      value: 'BS Information Systems',
+    },
+    {
+      label: 'Focus',
+      value: 'Front End Web Developer',
+    },
+    {
+      label: 'Status in School',
+      value: 'Currently Enrolled 2nd Year',
+    },
+    {
+      label: 'Field',
+      value: 'ICT / CSS / IT / IS',
+    },
+    {
+      label: 'Core Tech',
+      value: 'HTML, CSS, JavaScript, PHP, C++',
+    },
+    {
+      label: 'Specialty',
+      value: 'Web Designing & UI Layouts',
+    },
+  ];
+
   return (
     <section id="profile" className={`page-section ${isActive ? 'active' : ''}`}>
       <h2>My Profile</h2>
       <div className="profile-card">
         <ul className="info-list">
-          <li>
-            <span>Institution:</span>
-            <a
-              style={{ textDecoration: 'none', color: 'inherit', fontWeight: 600 }}
-              href="https://mccei.edu.ph/"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Mount Carmel College Escalante Inc.
-            </a>
-          </li>
-          <li>
-            <span>Program:</span>
-            <span>BS Information Systems</span>
-          </li>
-          <li>
-            <span>Focus:</span>
-            <span>Front End Web Developer</span>
-          </li>
-          <li>
-            <span>Status in School:</span>
-            <span>Currently Enrolled 2nd Year</span>
-          </li>
+          {profileDetails.map((item, index) => (
+            <li key={index} className="info-item">
+              <span className="info-label">{item.label}</span>
+              {item.isLink ? (
+                <a
+                  href={item.href}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="info-value info-link"
+                >
+                  {item.value}
+                </a>
+              ) : (
+                <span className="info-value">{item.value}</span>
+              )}
+            </li>
+          ))}
         </ul>
-        <p>
-          <span>Field:</span>
-          <span>ICT/CSS/IT/IS</span>
-        </p>
-        <p>
-          <span>Core Tech:</span>
-          <span>HTML, CSS, JavaScript, PHP, C++</span>
-        </p>
-        <p>
-          <span>Focus:</span>
-          <span>Web Designing</span>
-        </p>
       </div>
     </section>
   );

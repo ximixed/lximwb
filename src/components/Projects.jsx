@@ -3,11 +3,13 @@ function Projects({ isActive = true }) {
     {
       title: 'E-Commerce Web App',
       description: 'A web-based store layout featuring product catalogs and interactive elements.',
+      tags: ['HTML', 'CSS', 'JavaScript'],
       link: '#',
     },
     {
       title: 'Mobile UI Mockups',
       description: 'Interface designs tailored for modern mobile platforms with clean typography.',
+      tags: ['UI/UX', 'Responsive Design', 'Mobile'],
       link: '#',
     },
   ];
@@ -20,7 +22,16 @@ function Projects({ isActive = true }) {
           <div className="project-card" key={index}>
             <h3>{project.title}</h3>
             <p>{project.description}</p>
-            <a href={project.link} className="btn secondary-btn">
+            {project.tags && (
+              <div className="project-tags">
+                {project.tags.map((tag) => (
+                  <span key={tag} className="project-tag">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
+            <a href={project.link} className="btn secondary-btn project-btn">
               View Details
             </a>
           </div>
