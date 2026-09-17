@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Home, User, Briefcase, Mail, UserCircle, Menu, X } from 'lucide-react';
+import { Home, User, Briefcase, Mail, UserCircle, Menu, X, ShoppingBag } from 'lucide-react';
 import GhostFibers from './GhostFibers.jsx';
 
 function Header({ activeSection, onNavigate }) {
@@ -11,6 +11,7 @@ function Header({ activeSection, onNavigate }) {
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'contact', label: 'Contact', icon: Mail },
     { id: 'profile', label: 'Profile', icon: UserCircle },
+    { id: 'shop', label: 'Shop', icon: ShoppingBag },
   ];
 
   const handleNavClick = (sectionId) => {
@@ -33,13 +34,13 @@ function Header({ activeSection, onNavigate }) {
     <header>
       <div className="header-ghost-fibers" aria-hidden="true">
         <GhostFibers
-          lineColor="#140E35"
-          glowColor="#3437A0"
-          speed={0.2}
+          lineColor="#020617"
+          glowColor="#1e40af"
+          speed={0.14}
           scale={2}
-          layers={3}
-          glowIntensity={1.4}
-          vignette={0.4}
+          layers={2}
+          glowIntensity={1.0}
+          vignette={0.6}
           dpr={1}
         />
       </div>

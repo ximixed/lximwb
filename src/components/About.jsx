@@ -9,7 +9,7 @@ function About({ isActive = true }) {
     { name: 'PHP', Icon: SiPhp, color: '#777BB4' },
     { name: 'C++', Icon: SiCplusplus, color: '#00599C' },
     { name: 'React', Icon: SiReact, color: '#61DAFB' },
-    { name: 'Responsive Design', Icon: Smartphone, color: '#e2a63b' },
+    { name: 'Responsive Design', Icon: Smartphone, color: '#38bdf8' },
     { name: 'Git', Icon: SiGit, color: '#F05032' },
   ];
 

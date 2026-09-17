@@ -7,6 +7,7 @@ import Contact from './components/Contact.jsx';
 import Profile from './components/Profile.jsx';
 import Footer from './components/Footer.jsx';
 import GhostFibers from './components/GhostFibers.jsx';
+import Shop from './shop/Shop.jsx';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
@@ -14,7 +15,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'projects', 'contact', 'profile'].includes(hash)) {
+      if (['home', 'about', 'projects', 'contact', 'profile', 'shop'].includes(hash)) {
         setActiveSection(hash);
       } else if (!hash) {
         setActiveSection('home');
@@ -33,33 +34,38 @@ function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  // Render the gaming shop as its own full page
+  if (activeSection === 'shop') {
+    return <Shop />;
+  }
+
   return (
     <div className="app-root">
       <div className="bg-ghost-fibers" aria-hidden="true">
         <GhostFibers
-          lineColor="#140E35"
-          glowColor="#3437A0"
-          speed={0.2}
-          scale={2}
+          lineColor="#020617"
+          glowColor="#1d4ed8"
+          speed={0.14}
+          scale={2.2}
           rotation={0}
-          rotationSpeed={0.25}
-          layers={4}
-          waveAmplitude={0.015}
-          waveFrequency={3}
-          waveSpeed={0.15}
-          layerSpeed={0.08}
-          twist={0.1}
-          twistFrequency={5}
-          twistSpeed={1.2}
-          lineFrequency={5}
+          rotationSpeed={0.15}
+          layers={3}
+          waveAmplitude={0.012}
+          waveFrequency={2.5}
+          waveSpeed={0.12}
+          layerSpeed={0.06}
+          twist={0.08}
+          twistFrequency={4}
+          twistSpeed={1.0}
+          lineFrequency={4}
           lineSpacing={2}
-          lineSharpness={16}
-          glowFalloff={10}
-          glowIntensity={1.6}
-          brightness={2}
-          blueBoost={1.25}
-          vignette={0.8}
-          grain={0.05}
+          lineSharpness={14}
+          glowFalloff={12}
+          glowIntensity={1.2}
+          brightness={1.6}
+          blueBoost={1.8}
+          vignette={0.88}
+          grain={0.03}
           dpr={1}
         />
       </div>

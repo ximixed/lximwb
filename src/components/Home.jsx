@@ -17,8 +17,12 @@ function Home({ isActive = true, onNavigate }) {
   return (
     <section id="home" className={`page-section ${isActive ? 'active' : ''}`}>
       <div className="hero-content">
+        <div className="status-badge" aria-label="Current status">
+          <span className="status-dot" aria-hidden="true"></span>
+          <span>Available for projects & collaboration</span>
+        </div>
         <h1>
-          Hello, I'm <span className="highlight">Ilsim Sayon</span>
+          Hello, I'm <span className="hero-name">Ilsim Sayon</span>
         </h1>
         <p>Welcome to my Simple Personal Website!</p>
 
