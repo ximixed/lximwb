@@ -1,20 +1,22 @@
-import { Briefcase, ShoppingCart, Smartphone, ArrowUpRight } from 'lucide-react';
+import { Briefcase, ShoppingCart, Smartphone, ArrowUpRight, Play } from 'lucide-react';
+import { GiFlamingClaw } from 'react-icons/gi';
+import { TbFoodsteps } from 'react-icons/tb';
 
 function Projects({ isActive = true }) {
   const projects = [
     {
-      title: 'E-Commerce Web App',
-      description: 'A web-based store layout featuring product catalogs and interactive elements.',
+      title: 'Gaming Shoppee',
+      description: 'This Project is Coming Soon.',
       tags: ['HTML', 'CSS', 'JavaScript'],
       link: '#',
-      Icon: ShoppingCart,
+      Icon: GiFlamingClaw,
     },
     {
-      title: 'Mobile UI Mockups',
-      description: 'Interface designs tailored for modern mobile platforms with clean typography.',
+      title: 'Xim Foods',
+      description: 'This Project is Coming Soon.',
       tags: ['UI/UX', 'Responsive Design', 'Mobile'],
       link: '#',
-      Icon: Smartphone,
+      Icon: TbFoodsteps,
     },
   ];
 

@@ -3,8 +3,7 @@ import { Code2, PenTool, Layout } from 'lucide-react';
 function Home({ isActive = true, onNavigate }) {
   const themes = [
     { label: 'Frontend', Icon: Code2 },
-    { label: 'UI/UX', Icon: PenTool },
-    { label: 'Web Design', Icon: Layout },
+    
   ];
 
   const titleBlock = [
@@ -17,10 +16,7 @@ function Home({ isActive = true, onNavigate }) {
   return (
     <section id="home" className={`page-section ${isActive ? 'active' : ''}`}>
       <div className="hero-content">
-        <div className="status-badge" aria-label="Current status">
-          <span className="status-dot" aria-hidden="true"></span>
-          <span>Available for projects & collaboration</span>
-        </div>
+        
         <h1>
           Hello, I'm <span className="hero-name">Ilsim Sayon</span>
         </h1>
