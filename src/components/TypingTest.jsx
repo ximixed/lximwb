@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
-import { X, RotateCcw, Trophy, Zap, Clock, Target, CheckCircle2, Flame, BarChart3, Settings } from 'lucide-react';
+import { X, RotateCcw, Trophy, Zap, Clock, Target, CheckCircle2, Flame, BarChart3, Settings, Maximize2, Minimize2 } from 'lucide-react';
 import { playClickSound } from '../utils/audio.js';
 
 // Enhanced quotes organized by difficulty
@@ -459,6 +459,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
   const [showSettings, setShowSettings] = useState(true);
   const [timedDuration, setTimedDuration] = useState(60);
   const [wordCountTarget, setWordCountTarget] = useState(50);
+  const [isFullscreen, setIsFullscreen] = useState(false);
   
   // Test state
   const [quoteIndex, setQuoteIndex] = useState(0);
@@ -639,7 +640,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
   return (
     <div className="typing-modal-backdrop" onClick={onClose}>
       <div
-        className="typing-modal-card"
+        className={`typing-modal-card ${isFullscreen ? 'is-fullscreen' : ''}`}
         onClick={(e) => e.stopPropagation()}
         role="dialog"
         aria-modal="true"
@@ -654,6 +655,16 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
             <h2 id="typing-test-title" className="typing-heading">Typing Test</h2>
           </div>
           <div className="typing-header-actions">
+            <button
+              type="button"
+              className="typing-icon-btn"
+              onClick={() => setIsFullscreen((current) => !current)}
+              title={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+              aria-label={isFullscreen ? 'Exit fullscreen' : 'Enter fullscreen'}
+              aria-pressed={isFullscreen}
+            >
+              {isFullscreen ? <Minimize2 size={18} /> : <Maximize2 size={18} />}
+            </button>
             <button
               type="button"
               className="typing-icon-btn"
@@ -799,7 +810,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
 
         {/* Live Metrics Row */}
         {!showSettings && !showStats && (
-          <>
+          <div className="typing-test-area">
             <div className="typing-metrics-bar">
               <div className="typing-metric">
                 <span className="typing-metric-lbl">
@@ -921,7 +932,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
             <span className="typing-hint">Press Esc to exit | Ctrl+R to reset</span>
               </div>
             )}
-          </>
+          </div>
         )}
       </div>
     </div>
