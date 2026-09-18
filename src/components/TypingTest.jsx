@@ -412,11 +412,11 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
               <div className="progress-fill" style={{ width: `${Math.min(progressPercent, 100)}%` }}></div>
             </div>
 
-        {/* Typing Display Box */}
-        <div
-          className="typing-text-display"
-          onClick={() => inputRef.current && inputRef.current.focus()}
-        >
+            {/* Typing Display Box */}
+            <div
+              className="typing-text-display"
+              onClick={() => inputRef.current && inputRef.current.focus()}
+            >
           {targetText.split('').map((char, index) => {
             let status = 'untyped';
             if (index < inputVal.length) {
@@ -436,27 +436,27 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
         </div>
 
         {/* Hidden / Focused Input */}
-        <input
-          ref={inputRef}
-          type="text"
-          value={inputVal}
-          onChange={handleInputChange}
-          className="typing-hidden-input"
-          autoFocus
-          spellCheck={false}
-          autoCapitalize="off"
-          autoCorrect="off"
-          disabled={isFinished}
-          placeholder="Click here and start typing..."
-        />
+            <input
+              ref={inputRef}
+              type="text"
+              value={inputVal}
+              onChange={handleInputChange}
+              className="typing-hidden-input"
+              autoFocus
+              spellCheck={false}
+              autoCapitalize="off"
+              autoCorrect="off"
+              disabled={isFinished}
+              placeholder="Click here and start typing..."
+            />
 
-        {/* Completion Celebration Card */}
-        {isFinished ? (
+            {/* Completion Celebration Card */}
+            {isFinished ? (
           <div className="typing-finished-card">
             <div className="typing-finished-header">
               <Trophy size={26} className="trophy-icon" />
               <div>
-                <h3>Test Completed!</h3>
+                  <h3>Test Completed! 🎉</h3>
                 <p>
                   You scored <strong>{wpm} WPM</strong> with <strong>{accuracy}% accuracy</strong>!
                 </p>
@@ -494,8 +494,10 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
               <RotateCcw size={14} />
               <span>Reset Quote</span>
             </button>
-            <span className="typing-hint">Type the quote above � Press Esc to exit</span>
-          </div>
+            <span className="typing-hint">Press Esc to exit | Ctrl+R to reset</span>
+              </div>
+            )}
+          </>
         )}
       </div>
     </div>
