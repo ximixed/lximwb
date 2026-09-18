@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react';
 import { Home, User, Briefcase, Mail, UserCircle, Menu, X, ShoppingBag } from 'lucide-react';
-import GhostFibers from './GhostFibers.jsx';
 
 function Header({ activeSection, onNavigate }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -9,8 +8,8 @@ function Header({ activeSection, onNavigate }) {
     { id: 'home', label: 'Home', icon: Home },
     { id: 'about', label: 'About', icon: User },
     { id: 'projects', label: 'Projects', icon: Briefcase },
-    { id: 'contact', label: 'Contact', icon: Mail },
     { id: 'profile', label: 'Profile', icon: UserCircle },
+    { id: 'contact', label: 'Contact', icon: Mail },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
   ];
 
@@ -22,7 +21,7 @@ function Header({ activeSection, onNavigate }) {
   // Close mobile menu on resize to desktop
   useEffect(() => {
     const handleResize = () => {
-      if (window.innerWidth > 768) {
+      if (window.innerWidth > 900) {
         setMobileMenuOpen(false);
       }
     };
@@ -31,19 +30,7 @@ function Header({ activeSection, onNavigate }) {
   }, []);
 
   return (
-    <header>
-      <div className="header-ghost-fibers" aria-hidden="true">
-        <GhostFibers
-          lineColor="#020617"
-          glowColor="#1e40af"
-          speed={0.14}
-          scale={2}
-          layers={2}
-          glowIntensity={1.0}
-          vignette={0.6}
-          dpr={1}
-        />
-      </div>
+    <header className="mobile-header">
       <div className="nav-container">
         <a
           href="#home"
@@ -54,7 +41,7 @@ function Header({ activeSection, onNavigate }) {
           }}
           aria-label="Go to Home"
         >
-          <img src="pic/profile.jpg" alt="Ilsim Sayon" className="profile-logo" />
+          <img src="/pic/profile.jpg" alt="Ilsim Sayon" className="profile-logo" />
           <span className="brand-name">Ilsim Sayon</span>
         </a>
 

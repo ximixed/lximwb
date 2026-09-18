@@ -48,7 +48,7 @@ function Projects({ isActive = true }) {
                 ))}
               </div>
             )}
-            <a href={project.link} className="btn secondary-btn project-btn">
+            <a href={project.link} className="btn btn-primary project-btn">
               View Details
               <ArrowUpRight size={15} strokeWidth={2} />
             </a>

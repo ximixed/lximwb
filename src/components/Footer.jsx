@@ -1,5 +1,4 @@
 import { FaGithub, FaLinkedin, FaTiktok, FaFacebook, FaInstagram } from 'react-icons/fa';
-import GhostFibers from './GhostFibers.jsx';
 
 function Footer() {
   const currentYear = new Date().getFullYear();
@@ -12,19 +11,7 @@ function Footer() {
   ];
 
   return (
-    <footer>
-      <div className="footer-ghost-fibers" aria-hidden="true">
-        <GhostFibers
-          lineColor="#020617"
-          glowColor="#1e40af"
-          speed={0.14}
-          scale={2}
-          layers={2}
-          glowIntensity={1.0}
-          vignette={0.6}
-          dpr={1}
-        />
-      </div>
+    <footer className="site-footer">
       <div className="footer-content">
         <p className="footer-copyright">&copy; {currentYear} Ilsim Sayon. All rights reserved.</p>
         <div className="footer-links">
