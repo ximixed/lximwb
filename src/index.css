@@ -40,6 +40,31 @@
   --content-max-width: 820px;
 }
 
+[data-theme="dark"] {
+  /* Dark Mode Palette (Matched to Photo's sleek developer dark theme) */
+  --bg: #09090b;
+  --bg-subtle: #141417;
+  --bg-hover: #1f1f23;
+  --bg-card: #121215;
+
+  --ink: #f4f4f5;
+  --ink-secondary: #a1a1aa;
+  --ink-muted: #71717a;
+  --ink-faint: #52525b;
+
+  --border: #27272a;
+  --border-subtle: #18181b;
+  --border-strong: #3f3f46;
+
+  --btn-bg: #ffffff;
+  --btn-color: #000000;
+  --btn-hover-bg: #e4e4e7;
+  --btn-secondary-bg: #141417;
+  --btn-secondary-color: #f4f4f5;
+  --btn-secondary-border: #27272a;
+  --btn-secondary-hover: #1f1f23;
+}
+
 /* Base Reset */
 *, *::before, *::after {
   box-sizing: border-box;
@@ -271,31 +296,135 @@ input, textarea {
   color: var(--ink-muted);
 }
 
-.sidebar-status-card {
-  padding: 0.65rem 0.75rem;
-  border: 1px solid var(--border);
+/* Live Viewers & Community Chat */
+.sidebar-viewers-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  padding: 0.75rem;
   border-radius: 6px;
   background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
 }
 
-.status-live-indicator {
+.sidebar-viewers-row {
+  display: flex;
+  align-items: center;
+  gap: 0.65rem;
+}
+
+.avatar-stack {
+  display: flex;
+  align-items: center;
+}
+
+.avatar-circle {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  border: 1.5px solid var(--bg);
+  background-color: var(--border-strong);
+  color: var(--ink);
+  font-size: 0.58rem;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-left: -5px;
+}
+
+.avatar-circle:first-child {
+  margin-left: 0;
+}
+
+.avatar-circle.av-1 { background-color: #3b82f6; color: #ffffff; }
+.avatar-circle.av-2 { background-color: #10b981; color: #ffffff; }
+.avatar-circle.av-3 { background-color: #8b5cf6; color: #ffffff; }
+.avatar-circle.av-more { background-color: var(--bg-hover); color: var(--ink-muted); font-size: 0.55rem; }
+
+.viewers-count-text {
+  font-size: 0.75rem;
+  font-weight: 500;
+  color: var(--ink-secondary);
+}
+
+.sidebar-community-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-size: 0.76rem;
+  color: var(--ink-muted);
+  transition: color 0.15s ease;
+  width: fit-content;
+}
+
+.sidebar-community-link:hover {
+  color: var(--ink);
+}
+
+/* Bryl Lim Toggle Button Row: [ Monitor | Sun | Moon ] and [ Volume ] */
+.sidebar-toggles-row {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.live-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background-color: #10b981;
-  box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.2);
+.theme-toggle-pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 3px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  gap: 2px;
 }
 
-.live-text {
-  font-size: 0.76rem;
-  font-weight: 500;
-  color: var(--ink-secondary);
+.theme-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  border-radius: 9999px;
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.theme-toggle-btn:hover {
+  color: var(--ink);
+}
+
+.theme-toggle-btn.active {
+  background-color: var(--bg-card);
+  color: var(--ink);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.sound-toggle-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background-color: var(--bg-subtle);
+  border: 1px solid var(--border);
+  color: var(--ink-muted);
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.sound-toggle-btn:hover {
+  color: var(--ink);
+  background-color: var(--bg-hover);
+}
+
+.sound-toggle-btn.active {
+  color: var(--ink);
+  background-color: var(--bg-card);
+  border-color: var(--border-strong);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.08);
 }
 
 .sidebar-contact-note {
@@ -373,12 +502,22 @@ input, textarea {
   display: none;
 }
 
+.mobile-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.header-theme-pill {
+  padding: 2px;
+}
+
 .mobile-menu-toggle {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 40px;
-  height: 40px;
+  width: 38px;
+  height: 38px;
   border-radius: 6px;
   border: 1px solid var(--border);
   background: var(--bg);
@@ -430,6 +569,15 @@ input, textarea {
 .mobile-nav-btn.active {
   background-color: var(--ink);
   color: var(--bg);
+}
+
+.mobile-nav-footer {
+  margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 /* =========================================================

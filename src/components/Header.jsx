@@ -1,7 +1,28 @@
 import { useState, useEffect } from 'react';
-import { Home, User, Briefcase, Mail, UserCircle, Menu, X, ShoppingBag } from 'lucide-react';
+import {
+  Home,
+  User,
+  Briefcase,
+  Mail,
+  UserCircle,
+  Menu,
+  X,
+  ShoppingBag,
+  Monitor,
+  Sun,
+  Moon,
+  Volume2,
+  VolumeX,
+} from 'lucide-react';
 
-function Header({ activeSection, onNavigate }) {
+function Header({
+  activeSection,
+  onNavigate,
+  theme = 'light',
+  onThemeChange,
+  soundEnabled = false,
+  onToggleSound,
+}) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const navItems = [
@@ -45,42 +66,41 @@ function Header({ activeSection, onNavigate }) {
           <span className="brand-name">Ilsim Sayon</span>
         </a>
 
-        {/* Mobile Hamburger Toggle */}
-        <button
-          type="button"
-          className="mobile-menu-toggle"
-          onClick={() => setMobileMenuOpen((prev) => !prev)}
-          aria-expanded={mobileMenuOpen}
-          aria-controls="mobile-navigation"
-          aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
-        >
-          {mobileMenuOpen ? <X size={22} strokeWidth={2} /> : <Menu size={22} strokeWidth={2} />}
-        </button>
+        <div className="mobile-header-actions">
+          {/* Quick theme pill on mobile bar */}
+          <div className="theme-toggle-pill header-theme-pill" role="group" aria-label="Theme selection">
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('light')}
+              title="Light Theme"
+              aria-label="Light Theme"
+            >
+              <Sun size={12} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('dark')}
+              title="Dark Theme"
+              aria-label="Dark Theme"
+            >
+              <Moon size={12} strokeWidth={2} />
+            </button>
+          </div>
 
-        {/* Desktop Navigation */}
-        <nav className="desktop-nav" aria-label="Main Navigation">
-          <ul className="nav-links">
-            {navItems.map((item, index) => {
-              const IconComponent = item.icon;
-              return (
-                <li key={item.id} className="nav-item">
-                  {index > 0 && <span className="nav-separator" aria-hidden="true">|</span>}
-                  <a
-                    href={`#${item.id}`}
-                    className={`nav-btn ${activeSection === item.id ? 'active' : ''}`}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(item.id);
-                    }}
-                  >
-                    {IconComponent && <IconComponent size={14} strokeWidth={2} />}
-                    <span>{item.label}</span>
-                  </a>
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
+          {/* Mobile Hamburger Toggle */}
+          <button
+            type="button"
+            className="mobile-menu-toggle"
+            onClick={() => setMobileMenuOpen((prev) => !prev)}
+            aria-expanded={mobileMenuOpen}
+            aria-controls="mobile-navigation"
+            aria-label={mobileMenuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+          >
+            {mobileMenuOpen ? <X size={20} strokeWidth={2} /> : <Menu size={20} strokeWidth={2} />}
+          </button>
+        </div>
       </div>
 
       {/* Mobile Navigation Dropdown */}
@@ -109,6 +129,45 @@ function Header({ activeSection, onNavigate }) {
             );
           })}
         </ul>
+
+        {/* Full controls inside mobile drawer */}
+        <div className="mobile-nav-footer">
+          <div className="theme-toggle-pill" role="group" aria-label="Theme selection">
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'system' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('system')}
+              title="System Theme"
+            >
+              <Monitor size={13} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('light')}
+              title="Light Theme"
+            >
+              <Sun size={13} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('dark')}
+              title="Dark Theme"
+            >
+              <Moon size={13} strokeWidth={2} />
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className={`sound-toggle-btn ${soundEnabled ? 'active' : ''}`}
+            onClick={onToggleSound}
+            title={soundEnabled ? 'Mute Sound' : 'Enable Sound'}
+          >
+            {soundEnabled ? <Volume2 size={14} strokeWidth={2} /> : <VolumeX size={14} strokeWidth={2} />}
+          </button>
+        </div>
       </nav>
     </header>
   );

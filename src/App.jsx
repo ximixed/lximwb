@@ -8,9 +8,56 @@ import Contact from './components/Contact.jsx';
 import Profile from './components/Profile.jsx';
 import Footer from './components/Footer.jsx';
 import Shop from './shop/Shop.jsx';
+import { playClickSound } from './utils/audio.js';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('xim_theme') || 'light';
+  });
+  const [soundEnabled, setSoundEnabled] = useState(() => {
+    return localStorage.getItem('xim_sound') === 'true';
+  });
+
+  // Handle theme changes
+  useEffect(() => {
+    const root = document.documentElement;
+    localStorage.setItem('xim_theme', theme);
+
+    if (theme === 'system') {
+      const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+      root.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+
+      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+      const listener = (e) => {
+        root.setAttribute('data-theme', e.matches ? 'dark' : 'light');
+      };
+      mediaQuery.addEventListener('change', listener);
+      return () => mediaQuery.removeEventListener('change', listener);
+    } else {
+      root.setAttribute('data-theme', theme);
+    }
+  }, [theme]);
+
+  // Handle sound preference
+  useEffect(() => {
+    localStorage.setItem('xim_sound', String(soundEnabled));
+  }, [soundEnabled]);
+
+  const handleToggleSound = () => {
+    const next = !soundEnabled;
+    setSoundEnabled(next);
+    if (next) {
+      playClickSound();
+    }
+  };
+
+  const handleThemeChange = (newTheme) => {
+    setTheme(newTheme);
+    if (soundEnabled) {
+      playClickSound();
+    }
+  };
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -45,9 +92,12 @@ function App() {
       window.removeEventListener('hashchange', handleHashChange);
       window.removeEventListener('keydown', handleKeyDown);
     };
-  }, []);
+  }, [soundEnabled]);
 
   const navigateTo = (sectionId) => {
+    if (soundEnabled) {
+      playClickSound();
+    }
     window.location.hash = sectionId;
     setActiveSection(sectionId);
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -60,10 +110,24 @@ function App() {
 
   return (
     <div className="app-root">
-      <Header activeSection={activeSection} onNavigate={navigateTo} />
+      <Header
+        activeSection={activeSection}
+        onNavigate={navigateTo}
+        theme={theme}
+        onThemeChange={handleThemeChange}
+        soundEnabled={soundEnabled}
+        onToggleSound={handleToggleSound}
+      />
 
       <div className="app-layout">
-        <Sidebar activeSection={activeSection} onNavigate={navigateTo} />
+        <Sidebar
+          activeSection={activeSection}
+          onNavigate={navigateTo}
+          theme={theme}
+          onThemeChange={handleThemeChange}
+          soundEnabled={soundEnabled}
+          onToggleSound={handleToggleSound}
+        />
 
         <div className="main-col">
           <main className="content-container">

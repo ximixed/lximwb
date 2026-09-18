@@ -9,9 +9,23 @@ import {
   Users,
   Compass,
   ArrowUpRight,
+  Monitor,
+  Sun,
+  Moon,
+  Volume2,
+  VolumeX,
+  MessageSquare,
+  Keyboard,
 } from 'lucide-react';
 
-function Sidebar({ activeSection, onNavigate }) {
+function Sidebar({
+  activeSection,
+  onNavigate,
+  theme = 'light',
+  onThemeChange,
+  soundEnabled = false,
+  onToggleSound,
+}) {
   const primaryNav = [
     { id: 'home', label: 'Home', icon: Compass },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
@@ -107,6 +121,7 @@ function Sidebar({ activeSection, onNavigate }) {
           <button
             className="sidebar-shortcut-row"
             onClick={() => onNavigate('contact')}
+            title="Ask anything"
           >
             <span>Ask anything</span>
             <kbd className="sidebar-kbd">Alt + K</kbd>
@@ -114,17 +129,75 @@ function Sidebar({ activeSection, onNavigate }) {
           <button
             className="sidebar-shortcut-row"
             onClick={() => onNavigate('projects')}
+            title="Typing test & projects"
           >
-            <span>View work</span>
-            <kbd className="sidebar-kbd">Alt + P</kbd>
+            <span>Typing test</span>
+            <kbd className="sidebar-kbd">Alt + J</kbd>
           </button>
         </div>
 
-        <div className="sidebar-status-card">
-          <div className="status-live-indicator">
-            <span className="live-dot" />
-            <span className="live-text">Open for new projects</span>
+        {/* Live viewers indicator like Bryl Lim */}
+        <div className="sidebar-viewers-box">
+          <div className="sidebar-viewers-row">
+            <div className="avatar-stack">
+              <span className="avatar-circle av-1">IS</span>
+              <span className="avatar-circle av-2">JD</span>
+              <span className="avatar-circle av-3">AL</span>
+              <span className="avatar-circle av-more">+2</span>
+            </div>
+            <span className="viewers-count-text">5 people viewing now</span>
           </div>
+
+          <button
+            className="sidebar-community-link"
+            onClick={() => onNavigate('contact')}
+          >
+            <MessageSquare size={13} strokeWidth={2} />
+            <span>community chat</span>
+          </button>
+        </div>
+
+        {/* Bryl Lim style Toggle Button Row: [ Monitor | Sun | Moon ] and [ Volume ] */}
+        <div className="sidebar-toggles-row">
+          <div className="theme-toggle-pill" role="group" aria-label="Theme selection">
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'system' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('system')}
+              title="System Theme"
+              aria-label="System Theme"
+            >
+              <Monitor size={13} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'light' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('light')}
+              title="Light Theme"
+              aria-label="Light Theme"
+            >
+              <Sun size={13} strokeWidth={2} />
+            </button>
+            <button
+              type="button"
+              className={`theme-toggle-btn ${theme === 'dark' ? 'active' : ''}`}
+              onClick={() => onThemeChange && onThemeChange('dark')}
+              title="Dark Theme"
+              aria-label="Dark Theme"
+            >
+              <Moon size={13} strokeWidth={2} />
+            </button>
+          </div>
+
+          <button
+            type="button"
+            className={`sound-toggle-btn ${soundEnabled ? 'active' : ''}`}
+            onClick={onToggleSound}
+            title={soundEnabled ? 'Mute Sound Effects' : 'Enable Sound Effects'}
+            aria-label={soundEnabled ? 'Mute Sound Effects' : 'Enable Sound Effects'}
+          >
+            {soundEnabled ? <Volume2 size={14} strokeWidth={2} /> : <VolumeX size={14} strokeWidth={2} />}
+          </button>
         </div>
 
         <div className="sidebar-contact-note">
