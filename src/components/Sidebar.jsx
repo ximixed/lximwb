@@ -25,6 +25,7 @@ function Sidebar({
   onThemeChange,
   soundEnabled = false,
   onToggleSound,
+  onOpenTypingTest,
 }) {
   const primaryNav = [
     { id: 'home', label: 'Home', icon: Compass },
@@ -128,8 +129,8 @@ function Sidebar({
           </button>
           <button
             className="sidebar-shortcut-row"
-            onClick={() => onNavigate('projects')}
-            title="Typing test & projects"
+            onClick={onOpenTypingTest}
+            title="Start Typing Test"
           >
             <span>Typing test</span>
             <kbd className="sidebar-kbd">Alt + J</kbd>

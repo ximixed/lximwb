@@ -8,10 +8,12 @@ import Contact from './components/Contact.jsx';
 import Profile from './components/Profile.jsx';
 import Footer from './components/Footer.jsx';
 import Shop from './shop/Shop.jsx';
+import TypingTest from './components/TypingTest.jsx';
 import { playClickSound } from './utils/audio.js';
 
 function App() {
   const [activeSection, setActiveSection] = useState('home');
+  const [isTypingTestOpen, setIsTypingTestOpen] = useState(false);
   const [theme, setTheme] = useState(() => {
     return localStorage.getItem('xim_theme') || 'light';
   });
@@ -77,6 +79,9 @@ function App() {
       if (e.altKey && (e.key === 'k' || e.key === 'K')) {
         e.preventDefault();
         navigateTo('contact');
+      } else if (e.altKey && (e.key === 'j' || e.key === 'J')) {
+        e.preventDefault();
+        setIsTypingTestOpen(true);
       } else if (e.altKey && (e.key === 'p' || e.key === 'P')) {
         e.preventDefault();
         navigateTo('projects');
@@ -117,6 +122,7 @@ function App() {
         onThemeChange={handleThemeChange}
         soundEnabled={soundEnabled}
         onToggleSound={handleToggleSound}
+        onOpenTypingTest={() => setIsTypingTestOpen(true)}
       />
 
       <div className="app-layout">
@@ -127,11 +133,16 @@ function App() {
           onThemeChange={handleThemeChange}
           soundEnabled={soundEnabled}
           onToggleSound={handleToggleSound}
+          onOpenTypingTest={() => setIsTypingTestOpen(true)}
         />
 
         <div className="main-col">
           <main className="content-container">
-            <Home isActive={activeSection === 'home'} onNavigate={navigateTo} />
+            <Home
+              isActive={activeSection === 'home'}
+              onNavigate={navigateTo}
+              onOpenTypingTest={() => setIsTypingTestOpen(true)}
+            />
             <About isActive={activeSection === 'about'} />
             <Projects isActive={activeSection === 'projects'} />
             <Profile isActive={activeSection === 'profile'} />
@@ -140,6 +151,13 @@ function App() {
           <Footer />
         </div>
       </div>
+
+      {/* Interactive Typing Test Modal */}
+      <TypingTest
+        isOpen={isTypingTestOpen}
+        onClose={() => setIsTypingTestOpen(false)}
+        soundEnabled={soundEnabled}
+      />
     </div>
   );
 }

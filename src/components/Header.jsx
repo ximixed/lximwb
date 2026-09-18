@@ -13,6 +13,7 @@ import {
   Moon,
   Volume2,
   VolumeX,
+  Zap,
 } from 'lucide-react';
 
 function Header({
@@ -22,6 +23,7 @@ function Header({
   onThemeChange,
   soundEnabled = false,
   onToggleSound,
+  onOpenTypingTest,
 }) {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
@@ -128,6 +130,19 @@ function Header({
               </li>
             );
           })}
+          <li>
+            <button
+              type="button"
+              className="mobile-nav-btn"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                if (onOpenTypingTest) onOpenTypingTest();
+              }}
+            >
+              <Zap size={16} strokeWidth={2} />
+              <span>Typing Test (Alt + J)</span>
+            </button>
+          </li>
         </ul>
 
         {/* Full controls inside mobile drawer */}
