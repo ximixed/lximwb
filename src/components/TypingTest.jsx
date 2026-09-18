@@ -452,6 +452,23 @@ const QUOTE_CATEGORIES = {
   ]
 };
 
+const getWordCount = (text) => text.trim().split(/\s+/).filter(Boolean).length;
+
+const buildPassageFromQuotes = (quotes, startIndex, targetWords) => {
+  if (!quotes.length) return '';
+
+  const words = [];
+  let offset = 0;
+
+  while (words.length < targetWords && offset < quotes.length * 20) {
+    const quote = quotes[(startIndex + offset) % quotes.length];
+    words.push(...quote.trim().split(/\s+/));
+    offset += 1;
+  }
+
+  return words.slice(0, targetWords).join(' ');
+};
+
 function TypingTest({ isOpen, onClose, soundEnabled = false }) {
   // Test configuration
   const [testMode, setTestMode] = useState('quote'); // 'quote', 'timed', 'wordCount'
@@ -482,8 +499,16 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
   const testTimerRef = useRef(null);
 
   const getCurrentQuotes = () => QUOTE_CATEGORIES[difficulty];
-  const targetText = getCurrentQuotes()[quoteIndex];
-  const wordCount = inputVal.trim().split(/\s+/).filter(w => w.length > 0).length;
+  const currentQuotes = getCurrentQuotes();
+  const targetWordCount = testMode === 'wordCount'
+    ? wordCountTarget
+    : testMode === 'timed'
+      ? Math.max(120, timedDuration * 3)
+      : getWordCount(currentQuotes[quoteIndex]);
+  const targetText = testMode === 'quote'
+    ? currentQuotes[quoteIndex]
+    : buildPassageFromQuotes(currentQuotes, quoteIndex, targetWordCount);
+  const wordCount = getWordCount(inputVal);
 
   // Auto focus and reset when opening
   useEffect(() => {
@@ -570,9 +595,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
     if (timerRef.current) clearInterval(timerRef.current);
     if (testTimerRef.current) clearInterval(testTimerRef.current);
     
-    // Pick next quote
-    const quotes = getCurrentQuotes();
-    setQuoteIndex((prev) => (prev + 1) % quotes.length);
+    setQuoteIndex((prev) => (prev + 1) % currentQuotes.length);
     
     if (inputRef.current) {
       inputRef.current.focus();
@@ -599,6 +622,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
     }
 
     setInputVal(val);
+    const currentWordCount = getWordCount(val);
 
     // Compute accuracy
     let correctChars = 0;
@@ -620,7 +644,7 @@ function TypingTest({ isOpen, onClose, soundEnabled = false }) {
     
     if (testMode === 'quote' && val.length >= targetText.length && val === targetText) {
       shouldFinish = true;
-    } else if (testMode === 'wordCount' && wordCount >= wordCountTarget) {
+    } else if (testMode === 'wordCount' && currentWordCount >= wordCountTarget) {
       shouldFinish = true;
     }
     
