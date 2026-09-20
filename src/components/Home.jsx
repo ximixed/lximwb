@@ -10,11 +10,11 @@ function Home({ isActive = true, onNavigate }) {
 
   const featuredProjects = [
     {
-      title: 'Gaming Shoppee',
-      date: 'Aug 2026',
+      title: 'SAYON STORE',
+      date: 'Sep 2026',
       tag: 'E-Commerce',
-      desc: 'An interactive gaming gear and apparel store with custom inventory browsing and responsive checkout.',
-      action: () => onNavigate('shop'),
+      desc: 'A responsive tech storefront with product search, cart management, checkout, and PHP API integration.',
+      action: () => onNavigate('projects'),
     },
     {
       title: 'Xim Foods',

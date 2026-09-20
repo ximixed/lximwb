@@ -1,15 +1,14 @@
-import { Briefcase, ShoppingCart, Smartphone, ArrowUpRight, Play } from 'lucide-react';
-import { GiFlamingClaw } from 'react-icons/gi';
+import { Briefcase, ShoppingCart, ArrowUpRight } from 'lucide-react';
 import { TbFoodsteps } from 'react-icons/tb';
 
 function Projects({ isActive = true }) {
   const projects = [
     {
-      title: 'Gaming Shoppee',
-      description: 'This Project is Coming Soon.',
-      tags: ['HTML', 'CSS', 'JavaScript'],
-      link: '#',
-      Icon: GiFlamingClaw,
+      title: 'SAYON STORE',
+      description: 'A responsive tech storefront with product search, cart management, checkout, and PHP API integration.',
+      tags: ['React', 'PHP API', 'Responsive Design'],
+      link: 'https://github.com/ximixed/ilsimmvcproject',
+      Icon: ShoppingCart,
     },
     {
       title: 'Xim Foods',
