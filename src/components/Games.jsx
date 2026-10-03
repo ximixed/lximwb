@@ -700,9 +700,488 @@ function ReactionTimer() {
   );
 }
 
-/* =======================================================
-   GAMES PAGE
-   ======================================================= */
+function TicTacToeGame() {
+  const [difficulty, setDifficulty] = useState("simple");
+  const [board, setBoard] = useState(Array(9).fill(null));
+  const [turn, setTurn] = useState("P1");
+  const [scores, setScores] = useState({ P1: 0, P2: 0 });
+  const [winner, setWinner] = useState(null);
+  const [line, setLine] = useState([]);
+
+  const size = difficulty === "hard" ? 4 : 3;
+  const totalCells = size * size;
+
+  const resetRound = useCallback(() => {
+    setBoard(Array(totalCells).fill(null));
+    setTurn("P1");
+    setWinner(null);
+    setLine([]);
+  }, [totalCells]);
+
+  useEffect(() => {
+    resetRound();
+  }, [difficulty, resetRound]);
+
+  const checkWinner = (nextBoard) => {
+    const winPatterns = [];
+    for (let i = 0; i < size; i++) {
+      for (let j = 0; j < size; j++) {
+        const current = i * size + j;
+        if (j <= size - 3) {
+          winPatterns.push([current, current + 1, current + 2, current + 3]);
+        }
+        if (i <= size - 3) {
+          winPatterns.push([current, current + size, current + size * 2, current + size * 3]);
+        }
+        if (i <= size - 3 && j <= size - 3) {
+          winPatterns.push([current, current + size + 1, current + size * 2 + 2, current + size * 3 + 3]);
+        }
+        if (i <= size - 3 && j >= 3) {
+          winPatterns.push([current, current + size - 1, current + size * 2 - 2, current + size * 3 - 3]);
+        }
+      }
+    }
+
+    for (const pattern of winPatterns) {
+      const [a, b, c, d] = pattern;
+      if (nextBoard[a] && nextBoard[a] === nextBoard[b] && nextBoard[a] === nextBoard[c] && nextBoard[a] === nextBoard[d]) {
+        return { winner: nextBoard[a], line: pattern };
+      }
+    }
+
+    if (nextBoard.every(Boolean)) return { winner: "draw", line: [] };
+    return null;
+  };
+
+  const onCellClick = (idx) => {
+    if (board[idx] || winner) return;
+    const nextBoard = [...board];
+    nextBoard[idx] = turn === "P1" ? "X" : "O";
+    const outcome = checkWinner(nextBoard);
+    setBoard(nextBoard);
+
+    if (outcome) {
+      setWinner(outcome.winner);
+      setLine(outcome.line);
+      if (outcome.winner !== "draw") {
+        setScores((prev) => ({ ...prev, [outcome.winner === "X" ? "P1" : "P2"]: prev[outcome.winner === "X" ? "P1" : "P2"] + 1 }));
+      }
+      return;
+    }
+
+    setTurn((prev) => (prev === "P1" ? "P2" : "P1"));
+  };
+
+  const status = winner === "draw"
+    ? "Draw!"
+    : winner
+      ? `${winner === "X" ? "Player 1" : "Player 2"} wins!`
+      : `Player ${turn === "P1" ? "1" : "2"}'s turn`;
+
+  return (
+    <div className="game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">✖️ Tic-Tac-4</h3>
+          <p className="game-subtitle">2-player battle with simple or hard board size.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Trophy size={13} /> P1: <strong>{scores.P1}</strong></span>
+          <span className="game-score-item"><Trophy size={13} /> P2: <strong>{scores.P2}</strong></span>
+        </div>
+      </div>
+
+      <div className="mini-game-controls">
+        <button className={`mini-game-toggle${difficulty === "simple" ? " active" : ""}`} onClick={() => setDifficulty("simple")}>Simple</button>
+        <button className={`mini-game-toggle${difficulty === "hard" ? " active" : ""}`} onClick={() => setDifficulty("hard")}>Hard</button>
+        <button className="mini-game-toggle" onClick={resetRound}>Reset</button>
+      </div>
+
+      <div className="mini-scoreboard">
+        <span>{status}</span>
+      </div>
+
+      <div className="mini-game-grid" style={{ gridTemplateColumns: `repeat(${size}, minmax(0, 1fr))` }}>
+        {board.map((cell, idx) => (
+          <button
+            key={idx}
+            className={`mini-board-btn${line.includes(idx) ? " win" : ""}`}
+            onClick={() => onCellClick(idx)}
+          >
+            {cell}
+          </button>
+        ))}
+      </div>
+
+      <div className="game-controls-hint">
+        <span>{difficulty === "hard" ? "4-in-a-row win" : "3-in-a-row win"}</span>
+      </div>
+    </div>
+  );
+}
+
+function MemoryMatchGame() {
+  const [difficulty, setDifficulty] = useState("simple");
+  const [cards, setCards] = useState([]);
+  const [flipped, setFlipped] = useState([]);
+  const [matched, setMatched] = useState([]);
+  const [turn, setTurn] = useState("P1");
+  const [scores, setScores] = useState({ P1: 0, P2: 0 });
+  const [locked, setLocked] = useState(false);
+
+  const prepareDeck = useCallback((level) => {
+    const icons = ["🍉", "🍋", "🍇", "🍒", "🍊", "🍏", "🍎", "🍓", "🥝", "🍍", "🍑", "🍉"];
+    const pairCount = level === "hard" ? 6 : 4;
+    const deck = Array.from({ length: pairCount }, (_, i) => ({ id: `${icons[i]}-${i}-a`, value: icons[i] }))
+      .flatMap((card, i) => [
+        { ...card, id: `${card.id}-1` },
+        { ...card, id: `${card.id}-2`, value: card.value },
+      ])
+      .sort(() => Math.random() - 0.5);
+    setCards(deck);
+    setFlipped([]);
+    setMatched([]);
+    setTurn("P1");
+    setLocked(false);
+  }, []);
+
+  useEffect(() => {
+    prepareDeck(difficulty);
+  }, [difficulty, prepareDeck]);
+
+  useEffect(() => {
+    if (flipped.length !== 2) return;
+    const [first, second] = flipped;
+    const firstCard = cards.find((c) => c.id === first);
+    const secondCard = cards.find((c) => c.id === second);
+
+    if (!firstCard || !secondCard) return;
+
+    if (firstCard.value === secondCard.value) {
+      setMatched((prev) => [...prev, first, second]);
+      setScores((prev) => ({ ...prev, [turn]: prev[turn] + 1 }));
+      setFlipped([]);
+      return;
+    }
+
+    setLocked(true);
+    const timer = setTimeout(() => {
+      setFlipped([]);
+      setTurn((prev) => (prev === "P1" ? "P2" : "P1"));
+      setLocked(false);
+    }, 650);
+
+    return () => clearTimeout(timer);
+  }, [cards, flipped, turn]);
+
+  const revealCard = (id) => {
+    if (locked || flipped.includes(id) || matched.includes(id)) return;
+    setFlipped((prev) => [...prev, id]);
+  };
+
+  const allMatched = matched.length === cards.length;
+
+  return (
+    <div className="game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">🧠 Memory Match</h3>
+          <p className="game-subtitle">Match pairs — two players take turns.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Trophy size={13} /> P1: <strong>{scores.P1}</strong></span>
+          <span className="game-score-item"><Trophy size={13} /> P2: <strong>{scores.P2}</strong></span>
+        </div>
+      </div>
+
+      <div className="mini-game-controls">
+        <button className={`mini-game-toggle${difficulty === "simple" ? " active" : ""}`} onClick={() => setDifficulty("simple")}>Simple</button>
+        <button className={`mini-game-toggle${difficulty === "hard" ? " active" : ""}`} onClick={() => setDifficulty("hard")}>Hard</button>
+        <button className="mini-game-toggle" onClick={() => prepareDeck(difficulty)}>Shuffle</button>
+      </div>
+
+      <div className="mini-scoreboard">
+        <span>{allMatched ? "Game over!" : `Turn: ${turn}`}</span>
+      </div>
+
+      <div className="memory-grid" style={{ gridTemplateColumns: `repeat(${difficulty === "hard" ? 6 : 4}, minmax(0, 1fr))` }}>
+        {cards.map((card) => {
+          const isVisible = flipped.includes(card.id) || matched.includes(card.id);
+          return (
+            <button key={card.id} className={`memory-card${isVisible ? " open" : ""}`} onClick={() => revealCard(card.id)}>
+              {isVisible ? card.value : "?"}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="game-controls-hint">
+        <span>{difficulty === "hard" ? "12 cards — harder memory run" : "8 cards — quick memory duel"}</span>
+      </div>
+    </div>
+  );
+}
+
+function RpsGame() {
+  const [difficulty, setDifficulty] = useState("simple");
+  const [p1Move, setP1Move] = useState(null);
+  const [p2Move, setP2Move] = useState(null);
+  const [status, setStatus] = useState("Player 1 choose a move");
+  const [scores, setScores] = useState({ P1: 0, P2: 0 });
+
+  const moves = difficulty === "hard"
+    ? ["Rock", "Paper", "Scissors", "Lizard", "Spock"]
+    : ["Rock", "Paper", "Scissors"];
+
+  const determineWinner = (a, b) => {
+    if (a === b) return "draw";
+    const rules = {
+      Rock: ["Scissors", "Lizard"],
+      Paper: ["Rock", "Spock"],
+      Scissors: ["Paper", "Lizard"],
+      Lizard: ["Paper", "Spock"],
+      Spock: ["Scissors", "Rock"],
+    };
+    return rules[a].includes(b) ? "P1" : "P2";
+  };
+
+  const pickMove = (player, move) => {
+    if (player === "P1") setP1Move(move);
+    if (player === "P2") setP2Move(move);
+
+    if (player === "P1") {
+      setStatus("Player 2 choose a move");
+      return;
+    }
+
+    const outcome = determineWinner(p1Move, move);
+    if (outcome === "draw") {
+      setStatus("Draw round! Try again");
+    } else {
+      const winner = outcome === "P1" ? "Player 1" : "Player 2";
+      setStatus(`${winner} wins!`);
+      setScores((prev) => ({ ...prev, [winner === "Player 1" ? "P1" : "P2"]: prev[winner === "Player 1" ? "P1" : "P2"] + 1 }));
+    }
+    setP1Move(null);
+    setP2Move(null);
+  };
+
+  return (
+    <div className="game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">✊ Rock Paper</h3>
+          <p className="game-subtitle">Classic duel with difficulty variations.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Trophy size={13} /> P1: <strong>{scores.P1}</strong></span>
+          <span className="game-score-item"><Trophy size={13} /> P2: <strong>{scores.P2}</strong></span>
+        </div>
+      </div>
+
+      <div className="mini-game-controls">
+        <button className={`mini-game-toggle${difficulty === "simple" ? " active" : ""}`} onClick={() => { setDifficulty("simple"); setStatus("Player 1 choose a move"); setP1Move(null); setP2Move(null); }}>Simple</button>
+        <button className={`mini-game-toggle${difficulty === "hard" ? " active" : ""}`} onClick={() => { setDifficulty("hard"); setStatus("Player 1 choose a move"); setP1Move(null); setP2Move(null); }}>Hard</button>
+      </div>
+
+      <div className="mini-scoreboard">
+        <span>{status}</span>
+      </div>
+
+      <div className="rps-grid">
+        <div className="rps-panel">
+          <p>P1</p>
+          {moves.map((move) => (
+            <button key={`p1-${move}`} className={`mini-game-btn${p1Move === move ? " selected" : ""}`} onClick={() => pickMove("P1", move)}>{move}</button>
+          ))}
+        </div>
+        <div className="rps-panel">
+          <p>P2</p>
+          {moves.map((move) => (
+            <button key={`p2-${move}`} className={`mini-game-btn${p2Move === move ? " selected" : ""}`} onClick={() => pickMove("P2", move)}>{move}</button>
+          ))}
+        </div>
+      </div>
+
+      <div className="game-controls-hint">
+        <span>{difficulty === "hard" ? "Lizard & Spock rules" : "Classic 3-move duel"}</span>
+      </div>
+    </div>
+  );
+}
+
+function NumberGuessGame() {
+  const [difficulty, setDifficulty] = useState("simple");
+  const [target, setTarget] = useState(10);
+  const [p1Guess, setP1Guess] = useState("");
+  const [p2Guess, setP2Guess] = useState("");
+  const [status, setStatus] = useState("Player 1 guess a number");
+  const [scores, setScores] = useState({ P1: 0, P2: 0 });
+
+  const max = difficulty === "hard" ? 50 : 20;
+
+  const startRound = useCallback(() => {
+    setTarget(Math.floor(Math.random() * max) + 1);
+    setP1Guess("");
+    setP2Guess("");
+    setStatus("Player 1 guess a number");
+  }, [max]);
+
+  useEffect(() => {
+    startRound();
+  }, [difficulty, startRound]);
+
+  const submitGuess = (player, value) => {
+    const guess = Number(value);
+    if (!guess || guess < 1 || guess > max) return;
+
+    if (player === "P1") {
+      setP1Guess(guess);
+      setStatus("Player 2 guess a number");
+      return;
+    }
+
+    setP2Guess(guess);
+    const diff1 = Math.abs(guess - target);
+    const diff2 = Math.abs(p1Guess - target);
+
+    if (diff1 === diff2) {
+      setStatus("Draw! Both players were equally close");
+    } else if (diff1 < diff2) {
+      setStatus("Player 2 wins the round");
+      setScores((prev) => ({ ...prev, P2: prev.P2 + 1 }));
+    } else {
+      setStatus("Player 1 wins the round");
+      setScores((prev) => ({ ...prev, P1: prev.P1 + 1 }));
+    }
+  };
+
+  return (
+    <div className="game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">🎯 Number Duel</h3>
+          <p className="game-subtitle">Guess the hidden number - closest wins.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Trophy size={13} /> P1: <strong>{scores.P1}</strong></span>
+          <span className="game-score-item"><Trophy size={13} /> P2: <strong>{scores.P2}</strong></span>
+        </div>
+      </div>
+
+      <div className="mini-game-controls">
+        <button className={`mini-game-toggle${difficulty === "simple" ? " active" : ""}`} onClick={() => setDifficulty("simple")}>Simple</button>
+        <button className={`mini-game-toggle${difficulty === "hard" ? " active" : ""}`} onClick={() => setDifficulty("hard")}>Hard</button>
+        <button className="mini-game-toggle" onClick={startRound}>New Round</button>
+      </div>
+
+      <div className="mini-scoreboard">
+        <span>{status}</span>
+      </div>
+
+      <div className="guess-grid">
+        <div className="guess-box">
+          <label>P1 guess</label>
+          <input type="number" min="1" max={max} value={p1Guess} onChange={(e) => setP1Guess(Number(e.target.value))} />
+          <button className="mini-game-btn" onClick={() => submitGuess("P1", p1Guess)}>Lock</button>
+        </div>
+        <div className="guess-box">
+          <label>P2 guess</label>
+          <input type="number" min="1" max={max} value={p2Guess} onChange={(e) => setP2Guess(Number(e.target.value))} />
+          <button className="mini-game-btn" onClick={() => submitGuess("P2", p2Guess)}>Lock</button>
+        </div>
+      </div>
+
+      <div className="game-controls-hint">
+        <span>{difficulty === "hard" ? `Target range: 1 - ${max}` : `Target range: 1 - ${max}`}</span>
+      </div>
+    </div>
+  );
+}
+
+function DiceBattleGame() {
+  const [difficulty, setDifficulty] = useState("simple");
+  const [p1Roll, setP1Roll] = useState(null);
+  const [p2Roll, setP2Roll] = useState(null);
+  const [scores, setScores] = useState({ P1: 0, P2: 0 });
+  const [status, setStatus] = useState("Roll for both players");
+
+  const diceFaces = ["⚀", "⚁", "⚂", "⚃", "⚄", "⚅"];
+
+  const rollForPlayer = (player) => {
+    const diceCount = difficulty === "hard" ? 2 : 1;
+    const values = Array.from({ length: diceCount }, () => Math.floor(Math.random() * 6));
+    const total = values.reduce((sum, n) => sum + n + 1, 0);
+
+    if (player === "P1") {
+      setP1Roll({ values, total });
+      setStatus("Player 2 roll");
+      return;
+    }
+
+    setP2Roll({ values, total });
+    if (p1Roll) {
+      if (total > p1Roll.total) {
+        setStatus("Player 2 wins round");
+        setScores((prev) => ({ ...prev, P2: prev.P2 + 1 }));
+      } else if (total < p1Roll.total) {
+        setStatus("Player 1 wins round");
+        setScores((prev) => ({ ...prev, P1: prev.P1 + 1 }));
+      } else {
+        setStatus("Draw round");
+      }
+    }
+  };
+
+  const resetRound = () => {
+    setP1Roll(null);
+    setP2Roll(null);
+    setStatus("Roll for both players");
+  };
+
+  return (
+    <div className="game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">🎲 Dice Duel</h3>
+          <p className="game-subtitle">Who rolls higher? Simple or double-dice hard mode.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Trophy size={13} /> P1: <strong>{scores.P1}</strong></span>
+          <span className="game-score-item"><Trophy size={13} /> P2: <strong>{scores.P2}</strong></span>
+        </div>
+      </div>
+
+      <div className="mini-game-controls">
+        <button className={`mini-game-toggle${difficulty === "simple" ? " active" : ""}`} onClick={() => setDifficulty("simple")}>Simple</button>
+        <button className={`mini-game-toggle${difficulty === "hard" ? " active" : ""}`} onClick={() => setDifficulty("hard")}>Hard</button>
+        <button className="mini-game-toggle" onClick={resetRound}>Reset</button>
+      </div>
+
+      <div className="mini-scoreboard">
+        <span>{status}</span>
+      </div>
+
+      <div className="dice-grid">
+        <div className="dice-box">
+          <span className="dice-label">P1</span>
+          <div className="dice-face">{p1Roll ? p1Roll.values.map((v) => diceFaces[v]).join(" ") : "🎲"}</div>
+          <button className="mini-game-btn" onClick={() => rollForPlayer("P1")}>Roll</button>
+        </div>
+        <div className="dice-box">
+          <span className="dice-label">P2</span>
+          <div className="dice-face">{p2Roll ? p2Roll.values.map((v) => diceFaces[v]).join(" ") : "🎲"}</div>
+          <button className="mini-game-btn" onClick={() => rollForPlayer("P2")}>Roll</button>
+        </div>
+      </div>
+
+      <div className="game-controls-hint">
+        <span>{difficulty === "hard" ? "2 dice per player" : "1 die per player"}</span>
+      </div>
+    </div>
+  );
+}
+
 function Games({ isActive = true }) {
   return (
     <section id="games" className={`page-section ${isActive ? "active" : ""}`}>
@@ -712,13 +1191,18 @@ function Games({ isActive = true }) {
           <h2 className="games-page-title">Mini Games</h2>
         </div>
         <p className="games-subtitle">
-          Take a break — three games with built-in guides. Use the on-screen buttons or keyboard.
+          Take a break — eight games with built-in guides. Use the on-screen buttons or keyboard.
         </p>
       </div>
       <div className="games-grid">
         <SnakeGame />
         <Game2048 />
         <ReactionTimer />
+        <TicTacToeGame />
+        <MemoryMatchGame />
+        <RpsGame />
+        <NumberGuessGame />
+        <DiceBattleGame />
       </div>
     </section>
   );
