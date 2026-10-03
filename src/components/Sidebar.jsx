@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import {
   ShoppingBag,
   BookOpen,
@@ -16,7 +17,9 @@ import {
   VolumeX,
   MessageSquare,
   Keyboard,
+  Bot,
 } from 'lucide-react';
+import ChatBot from './ChatBot.jsx';
 
 function Sidebar({
   activeSection,
@@ -27,6 +30,8 @@ function Sidebar({
   onToggleSound,
   onOpenTypingTest,
 }) {
+  const [chatOpen, setChatOpen] = useState(false);
+
   const primaryNav = [
     { id: 'home', label: 'Home', icon: Compass },
     { id: 'about', label: 'About', icon: BookOpen },
@@ -103,8 +108,8 @@ function Sidebar({
         <div className="sidebar-shortcuts">
           <button
             className="sidebar-shortcut-row"
-            onClick={() => onNavigate('contact')}
-            title="Ask anything"
+            onClick={() => setChatOpen(true)}
+            title="Open AI Chat"
           >
             <span>Ask anything</span>
             <kbd className="sidebar-kbd">Alt + K</kbd>
@@ -191,6 +196,17 @@ function Sidebar({
           </button>
         </div>
 
+        {/* AI Chat trigger button */}
+        <button
+          className={`sidebar-ai-chat-btn ${chatOpen ? 'active' : ''}`}
+          onClick={() => setChatOpen((v) => !v)}
+          title="Open AI Chat"
+          aria-label="Open AI Chat"
+        >
+          <Bot size={14} strokeWidth={2} />
+          <span>AI Chat</span>
+        </button>
+
         <div className="sidebar-contact-note">
           <p className="sidebar-contact-caption">
             For work, collabs & everything else, reach me at:
@@ -204,6 +220,9 @@ function Sidebar({
           </a>
         </div>
       </div>
+
+      {/* ChatBot Panel — slides up above sidebar footer */}
+      <ChatBot isOpen={chatOpen} onClose={() => setChatOpen(false)} />
     </aside>
   );
 }
