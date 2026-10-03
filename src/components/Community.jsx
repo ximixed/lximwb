@@ -29,6 +29,15 @@ const normalizeEmail = (value = '') => value.trim().toLowerCase();
 
 const isValidEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 
+const getGuestIdentity = (nextEmail = '', nextNickname = '') => {
+  const normalizedEmail = normalizeEmail(nextEmail);
+  const fallbackName = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
+  return {
+    email: normalizedEmail,
+    name: fallbackName || 'Guest',
+  };
+};
+
 const makeUserId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
@@ -283,31 +292,37 @@ function Community({ isActive = true }) {
   };
 
   const persistAccount = (nextEmail = email, nextNickname = nickname, nextAvatar = selectedAvatar) => {
-    const normalizedEmail = normalizeEmail(nextEmail);
-    const safeNickname = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
+    const guestIdentity = getGuestIdentity(nextEmail, nextNickname);
+    const normalizedEmail = guestIdentity.email;
+    const safeNickname = guestIdentity.name;
     const safeAvatar = nextAvatar || animeAvatars[0].id;
 
-    if (!normalizedEmail || !isValidEmail(normalizedEmail)) {
-      setAccountMessage('Please enter a valid email to save your community account.');
-      return null;
+    if (nextEmail && !isValidEmail(normalizedEmail)) {
+      setAccountMessage('Your email looks invalid, but visitors can still join as a guest.');
     }
 
     const existingAccount = readCurrentAccount();
     const account = {
       id: existingAccount?.id || makeUserId(),
-      email: normalizedEmail,
+      email: normalizedEmail || 'guest@community.local',
       name: safeNickname,
       avatar: safeAvatar,
       updatedAt: new Date().toISOString(),
     };
 
     const accounts = readAccountsMap();
-    accounts[normalizedEmail] = account;
+    if (normalizedEmail) {
+      accounts[normalizedEmail] = account;
+    }
 
     try {
       localStorage.setItem(STORAGE_KEYS.account, JSON.stringify(account));
       localStorage.setItem(STORAGE_KEYS.accounts, JSON.stringify(accounts));
-      localStorage.setItem(STORAGE_KEYS.email, normalizedEmail);
+      if (normalizedEmail) {
+        localStorage.setItem(STORAGE_KEYS.email, normalizedEmail);
+      } else {
+        localStorage.removeItem(STORAGE_KEYS.email);
+      }
       localStorage.setItem(STORAGE_KEYS.nickname, safeNickname);
       localStorage.setItem(STORAGE_KEYS.avatar, safeAvatar);
     } catch (error) {
@@ -317,8 +332,10 @@ function Community({ isActive = true }) {
     setEmail(normalizedEmail);
     setNickname(safeNickname);
     setSelectedAvatar(safeAvatar);
-    setAccountMessage(`Signed in as ${normalizedEmail}`);
-    syncVisitorLog({ email: normalizedEmail, name: safeNickname, avatar: safeAvatar });
+    setAccountMessage(normalizedEmail ? `Signed in as ${normalizedEmail}` : 'Guest access enabled for this visitor');
+    if (normalizedEmail) {
+      syncVisitorLog({ email: normalizedEmail, name: safeNickname, avatar: safeAvatar });
+    }
 
     channelRef.current?.postMessage({
       type: 'profile',
@@ -344,12 +361,8 @@ function Community({ isActive = true }) {
     const trimmed = draft.trim();
     if (!trimmed) return;
 
-    if (!email || !isValidEmail(email)) {
-      setAccountMessage('Please enter a valid email before sending a message.');
-      return;
-    }
-
-    const activeAccount = persistAccount(email, nickname, selectedAvatar);
+    const guestIdentity = getGuestIdentity(email, nickname);
+    const activeAccount = persistAccount(guestIdentity.email, guestIdentity.name, selectedAvatar);
     if (!activeAccount) {
       return;
     }
