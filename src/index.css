@@ -2029,13 +2029,13 @@ input, textarea {
 
 .community-save-btn {
   align-self: flex-start;
-  min-height: 34px;
-  padding: 0.45rem 0.75rem;
-  font-size: 0.7rem;
+  min-height: 30px;
+  padding: 0.42rem 0.8rem;
+  font-size: 0.76rem;
   line-height: 1.2;
-  border-radius: 7px;
+  border-radius: 6px;
   width: auto;
-  max-width: 120px;
+  max-width: 110px;
 }
 
 .community-avatar-picker {
