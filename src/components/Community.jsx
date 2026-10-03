@@ -250,6 +250,20 @@ function Community({ isActive = true }) {
     }
   };
 
+  const resetPortfolioStats = () => {
+    setPortfolioViews(0);
+    setVisitorLog([]);
+
+    try {
+      localStorage.removeItem(STORAGE_KEYS.portfolioViews);
+      localStorage.removeItem(STORAGE_KEYS.portfolioViewTracker);
+      localStorage.removeItem(STORAGE_KEYS.visitors);
+      sessionStorage.removeItem('community-portfolio-view-session');
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+  };
+
   const persistAccount = (nextEmail = email, nextNickname = nickname, nextAvatar = selectedAvatar) => {
     const normalizedEmail = normalizeEmail(nextEmail);
     const safeNickname = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
@@ -360,6 +374,9 @@ function Community({ isActive = true }) {
           <div className="community-header-badges">
             <span className="community-live-badge">Live</span>
             <span className="community-view-badge">Views: {portfolioViews}</span>
+            <button type="button" className="community-reset-btn" onClick={resetPortfolioStats}>
+              Reset
+            </button>
           </div>
         </div>
 

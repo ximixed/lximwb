@@ -2057,6 +2057,19 @@ input, textarea {
   color: #93c5fd;
 }
 
+.community-reset-btn {
+  border: 1px solid rgba(248, 113, 113, 0.35);
+  background: rgba(248, 113, 113, 0.08);
+  color: #fca5a5;
+  border-radius: 999px;
+  padding: 0.3rem 0.6rem;
+  font-family: var(--font-mono);
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+
 .community-card {
   display: grid;
   grid-template-columns: minmax(220px, 290px) minmax(0, 1fr);
@@ -2492,23 +2505,55 @@ input, textarea {
     gap: 0.25rem;
   }
 
+  .community-header-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .community-header-badges {
+    width: 100%;
+    justify-content: space-between;
+  }
+
+  .community-reset-btn {
+    padding: 0.28rem 0.55rem;
+    font-size: 0.58rem;
+  }
+
+  .community-visitor-panel {
+    padding: 0.75rem 0.8rem;
+  }
+
+  .community-visitor-item {
+    padding: 0.55rem 0.6rem;
+  }
+
   .community-card {
     grid-template-columns: 1fr;
     padding: 1rem;
   }
 
-  .community-input-row {
-    flex-direction: column;
-    align-items: stretch;
+  .community-form {
+    gap: 0.85rem;
   }
 
-  .community-save-btn {
+  .community-save-row {
+    flex-direction: column;
+  }
+
+  .community-save-btn,
+  .community-save-profile-btn {
     width: 100%;
     max-width: 100%;
     align-self: stretch;
     min-height: 32px;
     padding: 0.42rem 0.7rem;
     font-size: 0.68rem;
+  }
+
+  .community-input-row {
+    flex-direction: column;
+    align-items: stretch;
   }
 
   .community-input-row .btn {
@@ -2548,6 +2593,28 @@ input, textarea {
 
   .home-subtext {
     font-size: 0.9rem;
+  }
+
+  .community-header-row h2 {
+    font-size: 1.5rem;
+  }
+
+  .community-visitor-item {
+    gap: 0.55rem;
+  }
+
+  .community-visitor-item small {
+    display: block;
+    word-break: break-word;
+  }
+
+  .community-message-meta {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .community-message-body p {
+    font-size: 0.84rem;
   }
 
   .btn {
