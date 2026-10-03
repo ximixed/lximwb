@@ -14,6 +14,7 @@ import {
   Volume2,
   VolumeX,
   Zap,
+  Gamepad2,
 } from 'lucide-react';
 
 function Header({
@@ -33,6 +34,7 @@ function Header({
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'profile', label: 'Profile', icon: UserCircle },
     { id: 'contact', label: 'Contact', icon: Mail },
+    { id: 'games', label: 'Games', icon: Gamepad2 },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
   ];
 

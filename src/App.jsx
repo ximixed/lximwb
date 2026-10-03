@@ -9,6 +9,7 @@ import Profile from './components/Profile.jsx';
 import Footer from './components/Footer.jsx';
 import Shop from './shop/Shop.jsx';
 import TypingTest from './components/TypingTest.jsx';
+import Games from './components/Games.jsx';
 import { playClickSound } from './utils/audio.js';
 
 function App() {
@@ -64,7 +65,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'projects', 'contact', 'profile', 'shop'].includes(hash)) {
+      if (['home', 'about', 'projects', 'contact', 'hire', 'profile', 'shop', 'games'].includes(hash)) {
         setActiveSection(hash);
       } else if (!hash) {
         setActiveSection('home');
@@ -88,6 +89,9 @@ function App() {
       } else if (e.altKey && (e.key === 'h' || e.key === 'H')) {
         e.preventDefault();
         navigateTo('home');
+      } else if (e.altKey && (e.key === 'g' || e.key === 'G')) {
+        e.preventDefault();
+        navigateTo('games');
       }
     };
 
@@ -146,7 +150,11 @@ function App() {
             <About isActive={activeSection === 'about'} />
             <Projects isActive={activeSection === 'projects'} />
             <Profile isActive={activeSection === 'profile'} />
-            <Contact isActive={activeSection === 'contact'} />
+            <Contact
+              isActive={activeSection === 'contact' || activeSection === 'hire'}
+              isHire={activeSection === 'hire'}
+            />
+            <Games isActive={activeSection === 'games'} />
           </main>
           <Footer />
         </div>

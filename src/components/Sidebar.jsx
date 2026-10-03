@@ -29,15 +29,10 @@ function Sidebar({
 }) {
   const primaryNav = [
     { id: 'home', label: 'Home', icon: Compass },
-    { id: 'shop', label: 'Shop', icon: ShoppingBag },
     { id: 'about', label: 'About', icon: BookOpen },
     { id: 'projects', label: 'Projects', icon: Briefcase },
+    { id: 'hire', label: 'Contact', icon: Mail },
     { id: 'profile', label: 'Profile', icon: User },
-  ];
-
-  const collabNav = [
-    { id: 'contact', label: 'Collabs', icon: Users },
-    { id: 'contact', label: 'Contact & Hire', icon: Mail },
   ];
 
   const exploreNav = [
@@ -65,26 +60,6 @@ function Sidebar({
             const isActive = activeSection === item.id;
             return (
               <li key={item.id + item.label} className="sidebar-nav-item">
-                <button
-                  onClick={() => onNavigate(item.id)}
-                  className={`sidebar-link ${isActive ? 'active' : ''}`}
-                >
-                  <Icon size={16} strokeWidth={1.75} className="sidebar-icon" />
-                  <span>{item.label}</span>
-                </button>
-              </li>
-            );
-          })}
-        </ul>
-
-        <div className="sidebar-divider" />
-
-        <ul className="sidebar-nav-list">
-          {collabNav.map((item, idx) => {
-            const Icon = item.icon;
-            const isActive = activeSection === item.id && idx === 0;
-            return (
-              <li key={item.label} className="sidebar-nav-item">
                 <button
                   onClick={() => onNavigate(item.id)}
                   className={`sidebar-link ${isActive ? 'active' : ''}`}
@@ -134,6 +109,14 @@ function Sidebar({
           >
             <span>Typing test</span>
             <kbd className="sidebar-kbd">Alt + J</kbd>
+          </button>
+          <button
+            className="sidebar-shortcut-row"
+            onClick={() => onNavigate('games')}
+            title="Play Mini Games"
+          >
+            <span>Mini games</span>
+            <kbd className="sidebar-kbd">Alt + G</kbd>
           </button>
         </div>
 

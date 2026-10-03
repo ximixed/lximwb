@@ -17,7 +17,7 @@ function Home({ isActive = true, onNavigate }) {
       action: () => onNavigate('projects'),
     },
     {
-      title: 'Xim Foods',
+      title: 'Library Books',
       date: 'Aug 2026',
       tag: 'Mobile Web App',
       desc: 'Clean mobile-first restaurant discovery and food ordering concept with instant menu exploration.',
