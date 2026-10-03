@@ -17,15 +17,21 @@ const STORAGE_KEYS = {
   nickname: 'community-nickname',
   avatar: 'community-avatar',
   messages: 'community-messages',
+  portfolioViews: 'portfolio-view-count',
 };
 
 const safeRead = (key, fallback) => {
   try {
     const stored = localStorage.getItem(key);
-    return stored ? stored : fallback;
+    return stored ?? fallback;
   } catch (error) {
     return fallback;
   }
+};
+
+const safeReadNumber = (key, fallback = 0) => {
+  const value = Number(safeRead(key, String(fallback)));
+  return Number.isFinite(value) ? value : fallback;
 };
 
 const safeReadMessages = () => {
@@ -42,7 +48,9 @@ function Community({ isActive = true }) {
   const [selectedAvatar, setSelectedAvatar] = useState(() => safeRead(STORAGE_KEYS.avatar, animeAvatars[0].id));
   const [messages, setMessages] = useState(() => safeReadMessages());
   const [draft, setDraft] = useState('');
+  const [portfolioViews, setPortfolioViews] = useState(() => safeReadNumber(STORAGE_KEYS.portfolioViews, 0));
   const channelRef = useRef(null);
+  const messageListRef = useRef(null);
 
   const selectedAvatarMeta = useMemo(
     () => animeAvatars.find((avatar) => avatar.id === selectedAvatar) || animeAvatars[0],
@@ -50,28 +58,14 @@ function Community({ isActive = true }) {
   );
 
   useEffect(() => {
+    const nextViews = safeReadNumber(STORAGE_KEYS.portfolioViews, 0) + 1;
+    setPortfolioViews(nextViews);
     try {
-      localStorage.setItem(STORAGE_KEYS.nickname, nickname.trim() || 'Guest');
+      localStorage.setItem(STORAGE_KEYS.portfolioViews, String(nextViews));
     } catch (error) {
       // Ignore storage issues in private browsing or restricted environments.
     }
-  }, [nickname]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.avatar, selectedAvatar);
-    } catch (error) {
-      // Ignore storage issues in private browsing or restricted environments.
-    }
-  }, [selectedAvatar]);
-
-  useEffect(() => {
-    try {
-      localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(messages));
-    } catch (error) {
-      // Ignore storage issues in private browsing or restricted environments.
-    }
-  }, [messages]);
+  }, []);
 
   useEffect(() => {
     if (!('BroadcastChannel' in window)) return undefined;
@@ -89,8 +83,9 @@ function Community({ isActive = true }) {
         });
       }
 
-      if (type === 'nickname') {
-        setNickname(payload.nickname || 'Guest');
+      if (type === 'profile') {
+        if (payload.nickname) setNickname(payload.nickname || 'Guest');
+        if (payload.avatar) setSelectedAvatar(payload.avatar);
       }
     };
 
@@ -110,23 +105,59 @@ function Community({ isActive = true }) {
       if (event.key === STORAGE_KEYS.nickname && event.newValue) {
         setNickname(event.newValue || 'Guest');
       }
+
+      if (event.key === STORAGE_KEYS.avatar && event.newValue) {
+        setSelectedAvatar(event.newValue || animeAvatars[0].id);
+      }
+
+      if (event.key === STORAGE_KEYS.portfolioViews && event.newValue) {
+        const count = Number(event.newValue);
+        if (Number.isFinite(count)) {
+          setPortfolioViews(count);
+        }
+      }
     };
 
     window.addEventListener('storage', onStorage);
     return () => window.removeEventListener('storage', onStorage);
   }, []);
 
-  const persistNickname = () => {
+  useEffect(() => {
+    if (messageListRef.current) {
+      messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
+    }
+  }, [messages]);
+
+  const saveProfile = (nextAvatar = selectedAvatar) => {
     const savedNickname = (nickname || '').trim() || 'Guest';
+    const savedAvatar = nextAvatar || animeAvatars[0].id;
+
     setNickname(savedNickname);
+    setSelectedAvatar(savedAvatar);
 
     try {
       localStorage.setItem(STORAGE_KEYS.nickname, savedNickname);
+      localStorage.setItem(STORAGE_KEYS.avatar, savedAvatar);
     } catch (error) {
       // Ignore storage issues in private browsing or restricted environments.
     }
 
-    channelRef.current?.postMessage({ type: 'nickname', payload: { nickname: savedNickname } });
+    channelRef.current?.postMessage({
+      type: 'profile',
+      payload: { nickname: savedNickname, avatar: savedAvatar },
+    });
+  };
+
+  const appendMessage = (nextMessage) => {
+    setMessages((prev) => {
+      const merged = [...prev, nextMessage];
+      try {
+        localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(merged));
+      } catch (error) {
+        // Ignore storage issues in private browsing or restricted environments.
+      }
+      return merged;
+    });
   };
 
   const handleSend = () => {
@@ -140,15 +171,8 @@ function Community({ isActive = true }) {
       text: trimmed,
     };
 
-    setMessages((prev) => [...prev, nextMessage]);
+    appendMessage(nextMessage);
     setDraft('');
-
-    try {
-      localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify([...messages, nextMessage]));
-    } catch (error) {
-      // Ignore storage issues in private browsing or restricted environments.
-    }
-
     channelRef.current?.postMessage({ type: 'message', payload: nextMessage });
   };
 
@@ -167,7 +191,10 @@ function Community({ isActive = true }) {
             <p className="community-kicker">Community</p>
             <h2>Visitor Lounge</h2>
           </div>
-          <span className="community-live-badge">Live</span>
+          <div className="community-header-badges">
+            <span className="community-live-badge">Live</span>
+            <span className="community-view-badge">Views: {portfolioViews}</span>
+          </div>
         </div>
 
         <div className="community-card">
@@ -183,8 +210,8 @@ function Community({ isActive = true }) {
               />
             </label>
 
-            <button type="button" className="btn btn-secondary community-save-btn" onClick={persistNickname}>
-              Save name
+            <button type="button" className="btn btn-secondary community-save-btn" onClick={saveProfile}>
+              Save
             </button>
 
             <div className="community-avatar-picker">
@@ -195,7 +222,7 @@ function Community({ isActive = true }) {
                     key={avatar.id}
                     type="button"
                     className={`avatar-option ${selectedAvatar === avatar.id ? 'selected' : ''}`}
-                    onClick={() => setSelectedAvatar(avatar.id)}
+                    onClick={() => saveProfile(avatar.id)}
                     aria-label={`Select ${avatar.label} avatar`}
                     title={avatar.label}
                   >
@@ -204,6 +231,10 @@ function Community({ isActive = true }) {
                 ))}
               </div>
             </div>
+
+            <button type="button" className="btn btn-secondary community-save-profile-btn" onClick={saveProfile}>
+              Save profile
+            </button>
           </div>
 
           <div className="community-chat-box">
@@ -217,7 +248,7 @@ function Community({ isActive = true }) {
               </div>
             </div>
 
-            <div className="community-message-list">
+            <div ref={messageListRef} className="community-message-list">
               {messages.map((message, index) => (
                 <div key={message.id || `${message.author}-${index}`} className="community-message">
                   <img

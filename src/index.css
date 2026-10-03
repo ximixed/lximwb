@@ -1955,6 +1955,13 @@ input, textarea {
   padding-bottom: 0.8rem;
 }
 
+.community-header-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+}
+
 .community-kicker {
   font-family: var(--font-mono);
   font-size: 0.72rem;
@@ -1970,16 +1977,26 @@ input, textarea {
   color: var(--ink);
 }
 
-.community-live-badge {
+.community-live-badge,
+.community-view-badge {
   font-family: var(--font-mono);
   font-size: 0.68rem;
   letter-spacing: 0.08em;
   text-transform: uppercase;
   padding: 0.35rem 0.7rem;
   border-radius: 999px;
+}
+
+.community-live-badge {
   border: 1px solid #2dd4bf55;
   background: rgba(45, 212, 191, 0.08);
   color: #5eead4;
+}
+
+.community-view-badge {
+  border: 1px solid rgba(96, 165, 250, 0.35);
+  background: rgba(96, 165, 250, 0.1);
+  color: #93c5fd;
 }
 
 .community-card {
@@ -1997,6 +2014,8 @@ input, textarea {
   flex-direction: column;
   gap: 1rem;
   padding-right: 0.5rem;
+  align-items: stretch;
+  justify-content: flex-start;
 }
 
 .community-field {
@@ -2027,15 +2046,21 @@ input, textarea {
   border-color: var(--border-strong);
 }
 
-.community-save-btn {
-  align-self: flex-start;
+.community-save-btn,
+.community-save-profile-btn {
+  align-self: stretch;
   min-height: 30px;
   padding: 0.42rem 0.8rem;
   font-size: 0.76rem;
   line-height: 1.2;
   border-radius: 6px;
-  width: auto;
-  max-width: 110px;
+  width: 100%;
+  max-width: 120px;
+  margin: 0;
+}
+
+.community-save-profile-btn {
+  margin-top: 0.1rem;
 }
 
 .community-avatar-picker {
