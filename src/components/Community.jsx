@@ -9,9 +9,8 @@ const animeAvatars = [
 ];
 
 const starterMessages = [
-  { author: 'Aoi', avatar: 'sun', text: 'Hey! Welcome to the community lounge ✨' },
-  { author: 'Kaito', avatar: 'moon', text: 'Drop your nickname and jump in.' },
-  { author: 'Mina', avatar: 'rose', text: 'Share your projects, ideas, or favorite anime vibes.' },
+  { author: 'xim', avatar: 'sun', text: 'Hey! Welcome to the community lounge ✨' },
+  { author: 'ria', avatar: 'moon', text: 'Drop your nickname and jump in.' },
 ];
 
 function Community({ isActive = true }) {
