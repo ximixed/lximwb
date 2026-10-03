@@ -2014,8 +2014,16 @@ input, textarea {
   flex-direction: column;
   gap: 1rem;
   padding-right: 0.5rem;
-  align-items: flex-start;
+  align-items: stretch;
   justify-content: flex-start;
+  width: 100%;
+}
+
+.community-save-row {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
 }
 
 .community-field {
@@ -2048,20 +2056,18 @@ input, textarea {
 
 .community-save-btn,
 .community-save-profile-btn {
-  align-self: flex-start;
   min-height: 30px;
   padding: 0.42rem 0.8rem;
   font-size: 0.76rem;
   line-height: 1.2;
   border-radius: 6px;
-  width: auto;
-  max-width: 120px;
   margin: 0;
-  flex-shrink: 0;
+  flex: 1;
+  min-width: 0;
 }
 
 .community-save-profile-btn {
-  margin-top: 0.1rem;
+  margin-top: 0;
 }
 
 .community-avatar-picker {

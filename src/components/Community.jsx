@@ -210,9 +210,15 @@ function Community({ isActive = true }) {
               />
             </label>
 
-            <button type="button" className="btn btn-secondary community-save-btn" onClick={saveProfile}>
-              Save
-            </button>
+            <div className="community-save-row">
+              <button type="button" className="btn btn-secondary community-save-btn" onClick={saveProfile}>
+                Save
+              </button>
+
+              <button type="button" className="btn btn-secondary community-save-profile-btn" onClick={saveProfile}>
+                Save profile
+              </button>
+            </div>
 
             <div className="community-avatar-picker">
               <span>Anime style avatar</span>
@@ -232,9 +238,6 @@ function Community({ isActive = true }) {
               </div>
             </div>
 
-            <button type="button" className="btn btn-secondary community-save-profile-btn" onClick={saveProfile}>
-              Save profile
-            </button>
           </div>
 
           <div className="community-chat-box">
