@@ -34,6 +34,7 @@ function Header({
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'profile', label: 'Profile', icon: UserCircle },
     { id: 'contact', label: 'Contact', icon: Mail },
+    { id: 'community', label: 'Community', icon: UserCircle },
     { id: 'games', label: 'Games', icon: Gamepad2 },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
   ];
@@ -143,6 +144,32 @@ function Header({
             >
               <Zap size={16} strokeWidth={2} />
               <span>Typing Test (Alt + J)</span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="mobile-nav-btn"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('about');
+              }}
+            >
+              <User size={16} strokeWidth={2} />
+              <span>Tech Stack</span>
+            </button>
+          </li>
+          <li>
+            <button
+              type="button"
+              className="mobile-nav-btn"
+              onClick={() => {
+                setMobileMenuOpen(false);
+                onNavigate('profile');
+              }}
+            >
+              <UserCircle size={16} strokeWidth={2} />
+              <span>Education & Info</span>
             </button>
           </li>
         </ul>
