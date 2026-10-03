@@ -53,9 +53,20 @@ const safeReadNumber = (key, fallback = 0) => {
 const safeReadMessages = () => {
   try {
     const stored = localStorage.getItem(STORAGE_KEYS.messages);
-    return stored ? JSON.parse(stored) : starterMessages;
+    if (!stored) return starterMessages;
+
+    const parsed = JSON.parse(stored);
+    return Array.isArray(parsed) && parsed.length > 0 ? parsed : starterMessages;
   } catch (error) {
     return starterMessages;
+  }
+};
+
+const persistMessages = (nextMessages) => {
+  try {
+    localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(nextMessages));
+  } catch (error) {
+    // Ignore storage issues in private browsing or restricted environments.
   }
 };
 
@@ -221,6 +232,11 @@ function Community({ isActive = true }) {
   }, []);
 
   useEffect(() => {
+    const savedMessages = safeReadMessages();
+    setMessages(savedMessages);
+  }, []);
+
+  useEffect(() => {
     if (messageListRef.current) {
       messageListRef.current.scrollTop = messageListRef.current.scrollHeight;
     }
@@ -319,11 +335,7 @@ function Community({ isActive = true }) {
   const appendMessage = (nextMessage) => {
     setMessages((prev) => {
       const merged = [...prev, nextMessage];
-      try {
-        localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(merged));
-      } catch (error) {
-        // Ignore storage issues in private browsing or restricted environments.
-      }
+      persistMessages(merged);
       return merged;
     });
   };
