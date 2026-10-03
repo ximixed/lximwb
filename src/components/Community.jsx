@@ -329,17 +329,17 @@ function Community({ isActive = true }) {
       // Ignore storage issues in private browsing or restricted environments.
     }
 
-    setEmail(normalizedEmail);
+    setEmail('');
     setNickname(safeNickname);
     setSelectedAvatar(safeAvatar);
-    setAccountMessage(normalizedEmail ? `Signed in as ${normalizedEmail}` : 'Guest access enabled for this visitor');
+    setAccountMessage('Guest access enabled for this visitor');
     if (normalizedEmail) {
       syncVisitorLog({ email: normalizedEmail, name: safeNickname, avatar: safeAvatar });
     }
 
     channelRef.current?.postMessage({
       type: 'profile',
-      payload: { email: normalizedEmail, nickname: safeNickname, avatar: safeAvatar },
+      payload: { email: '', nickname: safeNickname, avatar: safeAvatar },
     });
 
     return account;
@@ -361,8 +361,8 @@ function Community({ isActive = true }) {
     const trimmed = draft.trim();
     if (!trimmed) return;
 
-    const guestIdentity = getGuestIdentity(email, nickname);
-    const activeAccount = persistAccount(guestIdentity.email, guestIdentity.name, selectedAvatar);
+    const guestIdentity = getGuestIdentity('', nickname);
+    const activeAccount = persistAccount('', guestIdentity.name, selectedAvatar);
     if (!activeAccount) {
       return;
     }
@@ -445,20 +445,6 @@ function Community({ isActive = true }) {
           <div className="community-form">
             <div className="community-field-row">
               <label className="community-field">
-                <span>Email</span>
-                <input
-                  type="email"
-                  value={email}
-                  onChange={(event) => {
-                    setEmail(normalizeEmail(event.target.value));
-                    setAccountMessage('');
-                  }}
-                  placeholder="you@example.com"
-                  autoComplete="email"
-                />
-              </label>
-
-              <label className="community-field">
                 <span>Nickname</span>
                 <input
                   type="text"
@@ -510,7 +496,7 @@ function Community({ isActive = true }) {
                 <img src={selectedAvatarMeta.image} alt={selectedAvatarMeta.label} className="community-preview-avatar" />
                 <div>
                   <strong>{displayName}</strong>
-                  <small>{email || 'Guest access'}</small>
+                  <small>Guest access</small>
                 </div>
               </div>
             </div>
