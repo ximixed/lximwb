@@ -27,6 +27,8 @@ const STORAGE_KEYS = {
 
 const normalizeEmail = (value = '') => value.trim().toLowerCase();
 
+const isValidEmail = (value = '') => /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+
 const makeUserId = () => {
   if (typeof crypto !== 'undefined' && crypto.randomUUID) {
     return crypto.randomUUID();
@@ -269,13 +271,14 @@ function Community({ isActive = true }) {
     const safeNickname = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
     const safeAvatar = nextAvatar || animeAvatars[0].id;
 
-    if (!normalizedEmail) {
-      setAccountMessage('Please enter an email to save your community account.');
+    if (!normalizedEmail || !isValidEmail(normalizedEmail)) {
+      setAccountMessage('Please enter a valid email to save your community account.');
       return null;
     }
 
+    const existingAccount = readCurrentAccount();
     const account = {
-      id: currentAccount?.id || makeUserId(),
+      id: existingAccount?.id || makeUserId(),
       email: normalizedEmail,
       name: safeNickname,
       avatar: safeAvatar,
@@ -329,6 +332,11 @@ function Community({ isActive = true }) {
     const trimmed = draft.trim();
     if (!trimmed) return;
 
+    if (!email || !isValidEmail(email)) {
+      setAccountMessage('Please enter a valid email before sending a message.');
+      return;
+    }
+
     const activeAccount = persistAccount(email, nickname, selectedAvatar);
     if (!activeAccount) {
       return;
@@ -356,6 +364,7 @@ function Community({ isActive = true }) {
   };
 
   const isCurrentUserMessage = (message) => normalizeEmail(message.email || '') === normalizeEmail(email);
+  const displayName = nickname.trim() || (email ? email.split('@')[0] : 'Guest');
 
   useEffect(() => {
     if (email) {
@@ -415,7 +424,10 @@ function Community({ isActive = true }) {
                 <input
                   type="email"
                   value={email}
-                  onChange={(event) => setEmail(normalizeEmail(event.target.value))}
+                  onChange={(event) => {
+                    setEmail(normalizeEmail(event.target.value));
+                    setAccountMessage('');
+                  }}
                   placeholder="you@example.com"
                   autoComplete="email"
                 />
@@ -426,7 +438,10 @@ function Community({ isActive = true }) {
                 <input
                   type="text"
                   value={nickname}
-                  onChange={(event) => setNickname(event.target.value)}
+                  onChange={(event) => {
+                    setNickname(event.target.value);
+                    setAccountMessage('');
+                  }}
                   placeholder="Enter your nickname"
                   maxLength={18}
                 />
@@ -469,29 +484,33 @@ function Community({ isActive = true }) {
               <div className="community-user-identity">
                 <img src={selectedAvatarMeta.image} alt={selectedAvatarMeta.label} className="community-preview-avatar" />
                 <div>
-                  <strong>{nickname.trim() || 'Guest'}</strong>
+                  <strong>{displayName}</strong>
                   <small>{email || 'Guest access'}</small>
                 </div>
               </div>
             </div>
 
             <div ref={messageListRef} className="community-message-list">
-              {messages.map((message, index) => (
-                <div key={message.id || `${message.author}-${index}`} className={`community-message ${isCurrentUserMessage(message) ? 'mine' : ''}`}>
-                  <img
-                    src={animeAvatars.find((avatar) => avatar.id === message.avatar)?.image || animeAvatars[0].image}
-                    alt={animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'Avatar'}
-                    className="community-message-avatar"
-                  />
-                  <div className="community-message-body">
-                    <div className="community-message-meta">
-                      <span>{message.author}</span>
-                      {message.email ? <small>{message.email}</small> : null}
+              {messages.length === 0 ? (
+                <div className="community-empty-message">No messages yet. Be the first to say hello.</div>
+              ) : (
+                messages.map((message, index) => (
+                  <div key={message.id || `${message.author}-${index}`} className={`community-message ${isCurrentUserMessage(message) ? 'mine' : ''}`}>
+                    <img
+                      src={animeAvatars.find((avatar) => avatar.id === message.avatar)?.image || animeAvatars[0].image}
+                      alt={animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'Avatar'}
+                      className="community-message-avatar"
+                    />
+                    <div className="community-message-body">
+                      <div className="community-message-meta">
+                        <span>{message.author}</span>
+                        {message.email ? <small>{message.email}</small> : null}
+                      </div>
+                      <p>{message.text}</p>
                     </div>
-                    <p>{message.text}</p>
                   </div>
-                </div>
-              ))}
+                ))
+              )}
             </div>
 
             <div className="community-input-row">
