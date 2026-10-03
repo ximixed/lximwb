@@ -37,7 +37,7 @@
 
   /* Layout */
   --sidebar-width: 260px;
-  --content-max-width: 1180px;
+  --content-max-width: 1200px;
 }
 
 [data-theme="dark"] {
@@ -2236,6 +2236,18 @@ input, textarea {
    Responsive Breakpoints (Mobile, Tablets, Gadgets)
    ========================================================= */
 
+/* Large monitors and wide screens */
+@media (min-width: 1440px) {
+  .content-container {
+    width: min(100%, 1360px);
+  }
+
+  .home-hero {
+    grid-template-columns: 290px 1fr;
+    gap: 3rem;
+  }
+}
+
 /* Tablets and small laptops (<= 960px) */
 @media (max-width: 960px) {
   .app-layout {
@@ -2255,6 +2267,14 @@ input, textarea {
   .home-hero {
     grid-template-columns: 200px 1fr;
     gap: 1.75rem;
+  }
+
+  .community-card {
+    grid-template-columns: 1fr;
+  }
+
+  .community-form {
+    padding-right: 0;
   }
 }
 
@@ -2321,6 +2341,20 @@ input, textarea {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.25rem;
+  }
+
+  .community-card {
+    grid-template-columns: 1fr;
+    padding: 1rem;
+  }
+
+  .community-input-row {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .community-input-row .btn {
+    width: 100%;
   }
 
   .site-footer {
