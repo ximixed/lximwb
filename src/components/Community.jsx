@@ -21,6 +21,7 @@ const STORAGE_KEYS = {
   email: 'community-email',
   messages: 'community-messages',
   portfolioViews: 'portfolio-view-count',
+  portfolioViewTracker: 'portfolio-view-email-tracker',
 };
 
 const normalizeEmail = (value = '') => value.trim().toLowerCase();
@@ -74,6 +75,16 @@ const readAccountsMap = () => {
   }
 };
 
+const readPortfolioViewTracker = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.portfolioViewTracker);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (error) {
+    return {};
+  }
+};
+
 function Community({ isActive = true }) {
   const currentAccount = readCurrentAccount();
   const [email, setEmail] = useState(() => normalizeEmail(currentAccount?.email || safeRead(STORAGE_KEYS.email, '')));
@@ -92,9 +103,41 @@ function Community({ isActive = true }) {
   );
 
   useEffect(() => {
+    const trackedEmail = normalizeEmail(readCurrentAccount()?.email || safeRead(STORAGE_KEYS.email, ''));
+    const viewTracker = readPortfolioViewTracker();
+    const sessionCountKey = 'community-portfolio-view-session';
+    const alreadyCountedThisSession = sessionStorage.getItem(sessionCountKey) === 'true';
+
+    if (trackedEmail) {
+      if (viewTracker[trackedEmail]) {
+        setPortfolioViews(safeReadNumber(STORAGE_KEYS.portfolioViews, 0));
+        return;
+      }
+
+      const nextViews = safeReadNumber(STORAGE_KEYS.portfolioViews, 0) + 1;
+      setPortfolioViews(nextViews);
+
+      try {
+        viewTracker[trackedEmail] = new Date().toISOString();
+        localStorage.setItem(STORAGE_KEYS.portfolioViewTracker, JSON.stringify(viewTracker));
+        localStorage.setItem(STORAGE_KEYS.portfolioViews, String(nextViews));
+      } catch (error) {
+        // Ignore storage issues in private browsing or restricted environments.
+      }
+
+      return;
+    }
+
+    if (alreadyCountedThisSession) {
+      setPortfolioViews(safeReadNumber(STORAGE_KEYS.portfolioViews, 0));
+      return;
+    }
+
     const nextViews = safeReadNumber(STORAGE_KEYS.portfolioViews, 0) + 1;
     setPortfolioViews(nextViews);
+
     try {
+      sessionStorage.setItem(sessionCountKey, 'true');
       localStorage.setItem(STORAGE_KEYS.portfolioViews, String(nextViews));
     } catch (error) {
       // Ignore storage issues in private browsing or restricted environments.
