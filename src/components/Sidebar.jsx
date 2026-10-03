@@ -142,7 +142,7 @@ function Sidebar({
 
           <button
             className="sidebar-community-link"
-            onClick={() => onNavigate('contact')}
+            onClick={() => onNavigate('community')}
           >
             <MessageSquare size={13} strokeWidth={2} />
             <span>community chat</span>

@@ -6,6 +6,7 @@ import About from './components/About.jsx';
 import Projects from './components/Projects.jsx';
 import Contact from './components/Contact.jsx';
 import Profile from './components/Profile.jsx';
+import Community from './components/Community.jsx';
 import Footer from './components/Footer.jsx';
 import Shop from './shop/Shop.jsx';
 import TypingTest from './components/TypingTest.jsx';
@@ -65,7 +66,7 @@ function App() {
   useEffect(() => {
     const handleHashChange = () => {
       const hash = window.location.hash.replace('#', '');
-      if (['home', 'about', 'projects', 'contact', 'hire', 'profile', 'shop', 'games'].includes(hash)) {
+      if (['home', 'about', 'projects', 'contact', 'hire', 'profile', 'community', 'shop', 'games'].includes(hash)) {
         setActiveSection(hash);
       } else if (!hash) {
         setActiveSection('home');
@@ -150,6 +151,7 @@ function App() {
             <About isActive={activeSection === 'about'} />
             <Projects isActive={activeSection === 'projects'} />
             <Profile isActive={activeSection === 'profile'} />
+            <Community isActive={activeSection === 'community'} />
             <Contact
               isActive={activeSection === 'contact' || activeSection === 'hire'}
               isHire={activeSection === 'hire'}
