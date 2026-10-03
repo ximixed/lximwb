@@ -22,7 +22,14 @@ Projects:
 You can answer general questions, help with coding, or tell visitors about Ilsim and his work.
 Keep responses concise and friendly. If asked about Ilsim's contact or availability for hire, encourage them to reach out via email.`;
 
-const API_KEY = import.meta.env.VITE_GEMINI_API_KEY;
+const API_KEY = typeof import.meta.env.VITE_GEMINI_API_KEY === 'string'
+  ? import.meta.env.VITE_GEMINI_API_KEY.trim()
+  : '';
+
+const isPlaceholderKey = /paste_your_key_here|your_key_here|replace_me|example|AIzaSyA/i.test(API_KEY);
+const hasValidApiKey = Boolean(API_KEY) && !isPlaceholderKey;
+const chatbotStatus = hasValidApiKey ? 'Online' : 'Offline';
+const offlineMessage = 'I\'m in offline mode right now. Add a real VITE_GEMINI_API_KEY to your .env file to enable live AI responses.';
 
 function ChatBot({ isOpen, onClose }) {
   const [messages, setMessages] = useState([
@@ -51,14 +58,13 @@ function ChatBot({ isOpen, onClose }) {
     const text = input.trim();
     if (!text || loading) return;
 
-    if (!API_KEY) {
+    if (!hasValidApiKey) {
       setMessages((prev) => [
         ...prev,
         { role: 'user', text },
         {
           role: 'assistant',
-          text: '⚠️ No Gemini API key found. Please add VITE_GEMINI_API_KEY to your .env file.',
-          error: true,
+          text: offlineMessage,
         },
       ]);
       setInput('');
@@ -69,39 +75,25 @@ function ChatBot({ isOpen, onClose }) {
     setInput('');
     setLoading(true);
 
-    // Add placeholder for streaming response
     setMessages((prev) => [...prev, { role: 'assistant', text: '', streaming: true }]);
 
     try {
       const client = new GoogleGenAI({ apiKey: API_KEY });
-
-      const stream = await client.interactions.create({
-        model: 'gemini-3.8-flash',
-        system_instruction: SYSTEM_PROMPT,
-        input: text,
-        ...(prevInteractionId ? { previous_interaction_id: prevInteractionId } : {}),
-        stream: true,
+      const response = await client.models.generateContent({
+        model: 'gemini-2.5-flash',
+        contents: [{ role: 'user', parts: [{ text }] }],
+        config: {
+          systemInstruction: SYSTEM_PROMPT,
+        },
       });
 
-      let fullText = '';
-      let interactionId = null;
+      const fullText =
+        response?.text ||
+        response?.candidates?.[0]?.content?.parts
+          ?.map((part) => part?.text || '')
+          .join('') ||
+        'No response received from the model.';
 
-      for await (const event of stream) {
-        if (event.event_type === 'step.delta' && event.delta?.type === 'text') {
-          fullText += event.delta.text;
-          setMessages((prev) => {
-            const updated = [...prev];
-            updated[updated.length - 1] = { role: 'assistant', text: fullText, streaming: true };
-            return updated;
-          });
-        } else if (event.event_type === 'interaction.completed') {
-          interactionId = event.interaction?.id;
-        }
-      }
-
-      if (interactionId) setPrevInteractionId(interactionId);
-
-      // Mark streaming done
       setMessages((prev) => {
         const updated = [...prev];
         updated[updated.length - 1] = { role: 'assistant', text: fullText };
@@ -138,8 +130,8 @@ function ChatBot({ isOpen, onClose }) {
           <div>
             <span className="chatbot-title">AI Assistant</span>
             <span className="chatbot-status">
-              <span className="chatbot-status-dot" />
-              Online
+              <span className={`chatbot-status-dot ${hasValidApiKey ? 'online' : 'offline'}`} />
+              {chatbotStatus}
             </span>
           </div>
         </div>

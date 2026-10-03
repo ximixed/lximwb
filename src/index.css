@@ -115,6 +115,7 @@ input, textarea {
 
 .app-root {
   min-height: 100vh;
+  height: 100vh;
   display: flex;
   flex-direction: column;
   background-color: var(--bg);
@@ -122,10 +123,11 @@ input, textarea {
 
 .app-layout {
   display: flex;
-  min-height: 100vh;
+  height: 100vh;
   width: 100%;
   max-width: none;
   margin: 0;
+  overflow: hidden;
 }
 
 .main-col {
@@ -133,16 +135,18 @@ input, textarea {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
   background-color: var(--bg);
+  height: 100vh;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .content-container {
-  flex: 1;
   width: 100%;
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 3rem 2.5rem 4rem;
+  padding: 3rem 2.5rem 2rem;
+  min-height: 100%;
 }
 
 /* =========================================================
@@ -154,7 +158,7 @@ input, textarea {
   flex-shrink: 0;
   position: sticky;
   top: 0;
-  height: 100dvh;
+  height: 100vh;
   border-right: 1px solid var(--border);
   background-color: var(--bg);
   display: flex;
@@ -162,6 +166,7 @@ input, textarea {
   justify-content: space-between;
   padding: 1.35rem 1.1rem 1rem;
   overflow: visible;
+  align-self: stretch;
 }
 
 .sidebar-header {
@@ -3104,6 +3109,15 @@ input, textarea {
   border-radius: 50%;
   background: #22c55e;
   animation: chatbot-pulse 2s infinite;
+}
+
+.chatbot-status-dot.offline {
+  background: #ef4444;
+  animation: none;
+}
+
+.chatbot-status-dot.online {
+  background: #22c55e;
 }
 
 @keyframes chatbot-pulse {
