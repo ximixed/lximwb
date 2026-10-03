@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 
 const animeAvatars = [
   { id: 'zoro', label: 'Zoro', image: '/pic/community/zoro.svg' },
@@ -9,34 +9,147 @@ const animeAvatars = [
 ];
 
 const starterMessages = [
-  { author: 'xim', avatar: 'sun', text: 'Hey! Welcome to the community lounge ✨' },
-  { author: 'ria', avatar: 'moon', text: 'Drop your nickname and jump in.' },
+  { id: 'starter-1', author: 'xim', avatar: 'zoro', text: 'Hey! Welcome to the community lounge ✨' },
+  { id: 'starter-2', author: 'ria', avatar: 'naruto', text: 'Drop your nickname and jump in.' },
 ];
 
+const STORAGE_KEYS = {
+  nickname: 'community-nickname',
+  avatar: 'community-avatar',
+  messages: 'community-messages',
+};
+
+const safeRead = (key, fallback) => {
+  try {
+    const stored = localStorage.getItem(key);
+    return stored ? stored : fallback;
+  } catch (error) {
+    return fallback;
+  }
+};
+
+const safeReadMessages = () => {
+  try {
+    const stored = localStorage.getItem(STORAGE_KEYS.messages);
+    return stored ? JSON.parse(stored) : starterMessages;
+  } catch (error) {
+    return starterMessages;
+  }
+};
+
 function Community({ isActive = true }) {
-  const [nickname, setNickname] = useState('Guest');
-  const [selectedAvatar, setSelectedAvatar] = useState('sailor');
-  const [messages, setMessages] = useState(starterMessages);
+  const [nickname, setNickname] = useState(() => safeRead(STORAGE_KEYS.nickname, 'Guest'));
+  const [selectedAvatar, setSelectedAvatar] = useState(() => safeRead(STORAGE_KEYS.avatar, animeAvatars[0].id));
+  const [messages, setMessages] = useState(() => safeReadMessages());
   const [draft, setDraft] = useState('');
+  const channelRef = useRef(null);
 
   const selectedAvatarMeta = useMemo(
     () => animeAvatars.find((avatar) => avatar.id === selectedAvatar) || animeAvatars[0],
     [selectedAvatar]
   );
 
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.nickname, nickname.trim() || 'Guest');
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+  }, [nickname]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.avatar, selectedAvatar);
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+  }, [selectedAvatar]);
+
+  useEffect(() => {
+    try {
+      localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify(messages));
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+  }, [messages]);
+
+  useEffect(() => {
+    if (!('BroadcastChannel' in window)) return undefined;
+
+    const channel = new BroadcastChannel('community-chat');
+    channelRef.current = channel;
+
+    channel.onmessage = (event) => {
+      const { type, payload } = event.data || {};
+
+      if (type === 'message') {
+        setMessages((prev) => {
+          const alreadyExists = prev.some((item) => item.id === payload.id);
+          return alreadyExists ? prev : [...prev, payload];
+        });
+      }
+
+      if (type === 'nickname') {
+        setNickname(payload.nickname || 'Guest');
+      }
+    };
+
+    return () => channel.close();
+  }, []);
+
+  useEffect(() => {
+    const onStorage = (event) => {
+      if (event.key === STORAGE_KEYS.messages && event.newValue) {
+        try {
+          setMessages(JSON.parse(event.newValue));
+        } catch (error) {
+          // Ignore malformed storage data.
+        }
+      }
+
+      if (event.key === STORAGE_KEYS.nickname && event.newValue) {
+        setNickname(event.newValue || 'Guest');
+      }
+    };
+
+    window.addEventListener('storage', onStorage);
+    return () => window.removeEventListener('storage', onStorage);
+  }, []);
+
+  const persistNickname = () => {
+    const savedNickname = (nickname || '').trim() || 'Guest';
+    setNickname(savedNickname);
+
+    try {
+      localStorage.setItem(STORAGE_KEYS.nickname, savedNickname);
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+
+    channelRef.current?.postMessage({ type: 'nickname', payload: { nickname: savedNickname } });
+  };
+
   const handleSend = () => {
     const trimmed = draft.trim();
     if (!trimmed) return;
 
-    setMessages((prev) => [
-      ...prev,
-      {
-        author: nickname.trim() || 'Guest',
-        avatar: selectedAvatar,
-        text: trimmed,
-      },
-    ]);
+    const nextMessage = {
+      id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
+      author: nickname.trim() || 'Guest',
+      avatar: selectedAvatar,
+      text: trimmed,
+    };
+
+    setMessages((prev) => [...prev, nextMessage]);
     setDraft('');
+
+    try {
+      localStorage.setItem(STORAGE_KEYS.messages, JSON.stringify([...messages, nextMessage]));
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+
+    channelRef.current?.postMessage({ type: 'message', payload: nextMessage });
   };
 
   const handleKeyDown = (event) => {
@@ -70,6 +183,10 @@ function Community({ isActive = true }) {
               />
             </label>
 
+            <button type="button" className="btn btn-secondary community-save-btn" onClick={persistNickname}>
+              Save name
+            </button>
+
             <div className="community-avatar-picker">
               <span>Anime style avatar</span>
               <div className="avatar-options">
@@ -102,7 +219,7 @@ function Community({ isActive = true }) {
 
             <div className="community-message-list">
               {messages.map((message, index) => (
-                <div key={`${message.author}-${index}`} className="community-message">
+                <div key={message.id || `${message.author}-${index}`} className="community-message">
                   <img
                     src={animeAvatars.find((avatar) => avatar.id === message.avatar)?.image || animeAvatars[0].image}
                     alt={animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'Avatar'}
