@@ -2027,6 +2027,17 @@ input, textarea {
   border-color: var(--border-strong);
 }
 
+.community-save-btn {
+  align-self: flex-start;
+  min-height: 34px;
+  padding: 0.45rem 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1.2;
+  border-radius: 7px;
+  width: auto;
+  max-width: 120px;
+}
+
 .community-avatar-picker {
   display: flex;
   flex-direction: column;
@@ -2278,6 +2289,13 @@ input, textarea {
   .community-form {
     padding-right: 0;
   }
+
+  .community-save-btn {
+    min-height: 32px;
+    padding: 0.4rem 0.7rem;
+    font-size: 0.68rem;
+    max-width: 110px;
+  }
 }
 
 /* Mobile & Gadgets (<= 820px) */
@@ -2358,6 +2376,15 @@ input, textarea {
   .community-input-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .community-save-btn {
+    width: 100%;
+    max-width: 100%;
+    align-self: stretch;
+    min-height: 32px;
+    padding: 0.42rem 0.7rem;
+    font-size: 0.68rem;
   }
 
   .community-input-row .btn {
