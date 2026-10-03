@@ -45,7 +45,7 @@ function Home({ isActive = true, onNavigate }) {
       <div className="home-hero">
         <div className="home-hero-avatar-box">
           <img
-            src="/pic/profile.jpg"
+            src="/pic/pic1.png"
             alt="Ilsim Sayon"
             className="home-hero-avatar"
           />
