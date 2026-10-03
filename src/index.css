@@ -492,7 +492,9 @@ input, textarea {
   height: 32px;
   border-radius: 50%;
   object-fit: cover;
+  object-position: center;
   border: 1px solid var(--border);
+  image-rendering: auto;
 }
 
 .brand-name {
@@ -714,7 +716,9 @@ input, textarea {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center;
   display: block;
+  image-rendering: auto;
   filter: contrast(1.04) grayscale(0.1);
   transition: transform 0.3s ease, filter 0.3s ease;
 }

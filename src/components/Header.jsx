@@ -66,7 +66,7 @@ function Header({
           }}
           aria-label="Go to Home"
         >
-          <img src="/pic/profile.jpg" alt="Ilsim Sayon" className="profile-logo" />
+          <img src="/pic/pic1.png" alt="Ilsim Sayon" className="profile-logo" />
           <span className="brand-name">Ilsim Sayon</span>
         </a>
 
