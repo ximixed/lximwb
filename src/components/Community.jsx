@@ -1,12 +1,11 @@
 import { useMemo, useState } from 'react';
 
 const animeAvatars = [
-  { id: 'sailor', label: 'Sailor', color: '#8b5cf6' },
-  { id: 'sun', label: 'Sun', color: '#f59e0b' },
-  { id: 'moon', label: 'Moon', color: '#60a5fa' },
-  { id: 'rose', label: 'Rose', color: '#f472b6' },
-  { id: 'midnight', label: 'Midnight', color: '#34d399' },
-  { id: 'shadow', label: 'Shadow', color: '#f87171' },
+  { id: 'zoro', label: 'Zoro', image: '/pic/community/zoro.svg' },
+  { id: 'naruto', label: 'Naruto', image: '/pic/community/naruto.svg' },
+  { id: 'luffy', label: 'Luffy', image: '/pic/community/luffy.svg' },
+  { id: 'saitama', label: 'Saitama', image: '/pic/community/saitama.svg' },
+  { id: 'goku', label: 'Goku', image: '/pic/community/goku.svg' },
 ];
 
 const starterMessages = [
@@ -83,9 +82,8 @@ function Community({ isActive = true }) {
                     onClick={() => setSelectedAvatar(avatar.id)}
                     aria-label={`Select ${avatar.label} avatar`}
                     title={avatar.label}
-                    style={{ '--avatar-color': avatar.color }}
                   >
-                    <span className="avatar-face">{avatar.label.slice(0, 1)}</span>
+                    <img src={avatar.image} alt={avatar.label} className="avatar-face" />
                   </button>
                 ))}
               </div>
@@ -95,9 +93,7 @@ function Community({ isActive = true }) {
           <div className="community-chat-box">
             <div className="community-chat-header">
               <div className="community-user-identity">
-                <span className="community-preview-avatar" style={{ '--avatar-color': selectedAvatarMeta.color }}>
-                  {selectedAvatarMeta.label.slice(0, 1)}
-                </span>
+                <img src={selectedAvatarMeta.image} alt={selectedAvatarMeta.label} className="community-preview-avatar" />
                 <div>
                   <strong>{nickname.trim() || 'Guest'}</strong>
                   <small>online</small>
@@ -108,12 +104,11 @@ function Community({ isActive = true }) {
             <div className="community-message-list">
               {messages.map((message, index) => (
                 <div key={`${message.author}-${index}`} className="community-message">
-                  <span
+                  <img
+                    src={animeAvatars.find((avatar) => avatar.id === message.avatar)?.image || animeAvatars[0].image}
+                    alt={animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'Avatar'}
                     className="community-message-avatar"
-                    style={{ '--avatar-color': animeAvatars.find((avatar) => avatar.id === message.avatar)?.color || '#8b5cf6' }}
-                  >
-                    {(animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'A').slice(0, 1)}
-                  </span>
+                  />
                   <div className="community-message-body">
                     <div className="community-message-meta">
                       <span>{message.author}</span>

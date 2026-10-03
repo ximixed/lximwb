@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="Anime avatar 1">
+  <rect width="220" height="220" fill="#f5f5f5"/>
+  <path d="M43 74c8-28 47-43 74-43 29 0 46 11 58 33 13 21 14 42 4 63-16 33-51 53-96 49-38-4-62-30-64-61-1-17 10-31 24-41Z" fill="#1b5e56"/>
+  <path d="M48 82c8-27 21-41 44-49 35-12 82 9 98 38 7 12 8 27 3 42-9 28-35 48-61 52-42 7-77-16-84-52-2-9-2-21 0-31Z" fill="#0f8a74"/>
+  <path d="M79 87c-6 22-10 47-9 66 1 18 12 33 32 38 20 6 50 5 66-10 18-17 23-52 8-78-9-16-21-19-35-26-15-7-38-6-62 10Z" fill="#f0d1b3"/>
+  <path d="M53 72c-12 14-19 29-17 48 3 30 31 52 58 53 25 1 45-11 58-28 0 0-26 8-44 7-35-1-58-17-55-80Z" fill="#1d6a59" opacity="0.55"/>
+  <path d="M78 95c-15 13-27 25-29 48-3 28 17 42 39 42 17 0 33-3 47-18 18-19 18-45 3-65-16-22-38-26-60-7Z" fill="#f3dfc2"/>
+  <path d="M79 94c14 9 32 11 48 5 13-5 26-18 30-35-12 0-20-2-32 0-20 4-42 14-46 30Z" fill="#f5d7b1"/>
+  <path d="M58 103c3 8 14 17 27 20" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round"/>
+  <path d="M104 109c6 7 20 17 33 17" stroke="#1f1f1f" stroke-width="4" stroke-linecap="round"/>
+  <path d="M68 136c8 14 22 21 39 21 18 0 34-9 40-22" stroke="#1c1c1c" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="84" cy="114" r="6" fill="#111"/><circle cx="126" cy="113" r="6" fill="#111"/>
+  <path d="M40 151c15-31 41-54 83-59 39-4 71 16 95 42l-66 13-112 4Z" fill="#0d7d6c"/>
+  <path d="M62 178c44-10 83-11 118-2l-26 57H83l-21-55Z" fill="#2b7d68"/>
+  <path d="M73 157c18 18 36 17 64 0" stroke="#0d1d1d" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M133 74c3 10 17 16 30 14 19-3 35-16 41-31" stroke="#1d1d1d" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M56 83c-8 7-18 10-31 8" stroke="#1d1d1d" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <path d="M28 148c16 10 31 18 50 19" stroke="#1d1d1d" stroke-width="4" stroke-linecap="round" fill="none"/>
+  <g fill="#f7d65b" stroke="#111" stroke-width="2">
+    <circle cx="165" cy="110" r="8"/>
+    <circle cx="175" cy="119" r="8"/>
+    <circle cx="182" cy="133" r="8"/>
+    <circle cx="172" cy="146" r="8"/>
+  </g>
+</svg>

@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 220 220" role="img" aria-label="Anime avatar 3">
+  <rect width="220" height="220" fill="#f4f4f4"/>
+  <path d="M54 49c11-24 48-41 86-36 32 4 49 14 62 33 16 23 18 49 8 78-18 55-76 79-122 64-38-13-57-54-52-89 2-16 8-33 18-50Z" fill="#f8d15a"/>
+  <path d="M45 89c7-28 28-48 54-56 52-16 102 8 113 58 8 40-15 69-49 86-32 16-83 21-115-2-33-23-25-67-3-86Z" fill="#f4c649"/>
+  <path d="M74 87c7-33 31-48 57-51 41-5 79 22 80 63 2 15-4 29-14 42-17 24-53 37-84 31-30-5-52-19-56-52-2-11 0-23 17-33Z" fill="#f0d2a3"/>
+  <path d="M61 92c15 17 36 26 59 28 27 2 52-5 72-28" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M76 123c13 10 26 15 41 15 16 0 29-5 44-16" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <circle cx="92" cy="113" r="7" fill="#111"/><circle cx="141" cy="113" r="7" fill="#111"/>
+  <path d="M98 149c15 12 30 13 49 0" stroke="#111" stroke-width="4" fill="none" stroke-linecap="round"/>
+  <path d="M40 145c14-17 28-23 53-13l-10 51-43-38Z" fill="#d3322d"/>
+  <path d="M146 136c13-20 38-24 58-3l-13 48-45-45Z" fill="#d3322d"/>
+  <path d="M70 174c16 14 37 20 62 16 21-4 35-15 55-36l-13 67H98l-28-47Z" fill="#ef4d3d"/>
+  <path d="M56 173c12 16 25 27 41 35 18 9 39 11 61 4 20-7 30-22 41-36l-7 41H83l-27-44Z" fill="#d6342d"/>
+  <path d="M111 67c15 5 27 1 35-11" stroke="#111" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M57 70c13 9 18 22 18 39" stroke="#111" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <path d="M157 62c12 7 22 21 27 39" stroke="#111" stroke-width="5" stroke-linecap="round" fill="none"/>
+  <g fill="#d9a938" stroke="#111" stroke-width="2">
+    <path d="M28 123c8 0 13 4 14 12-7 6-11 15-14 25-6-5-9-12-7-20 2-9 4-14 7-17Z"/>
+    <path d="M35 75c9-11 18-15 31-16" stroke-linecap="round"/>
+  </g>
+</svg>
