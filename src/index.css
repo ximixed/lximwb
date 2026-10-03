@@ -37,7 +37,7 @@
 
   /* Layout */
   --sidebar-width: 260px;
-  --content-max-width: 820px;
+  --content-max-width: 1180px;
 }
 
 [data-theme="dark"] {
@@ -142,10 +142,10 @@ input, textarea {
 }
 
 .content-container {
-  width: 100%;
+  width: min(100%, var(--content-max-width));
   max-width: var(--content-max-width);
   margin: 0 auto;
-  padding: 3rem 2.5rem 2rem;
+  padding: 1.2rem 2.5rem 2rem;
   min-height: 100%;
 }
 
