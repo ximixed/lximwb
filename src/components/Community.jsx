@@ -9,15 +9,27 @@ const animeAvatars = [
 ];
 
 const starterMessages = [
-  { id: 'starter-1', author: 'xim', avatar: 'zoro', text: 'Hey! Welcome to the community lounge ✨' },
-  { id: 'starter-2', author: 'xim', avatar: 'naruto', text: 'Drop your nickname and jump in.' },
+  { id: 'starter-1', userId: 'system', email: 'hello@community.local', author: 'xim', avatar: 'zoro', text: 'Hey! Welcome to the community lounge ✨' },
+  { id: 'starter-2', userId: 'system', email: 'hello@community.local', author: 'xim', avatar: 'naruto', text: 'Use your email to join and chat with other visitors.' },
 ];
 
 const STORAGE_KEYS = {
+  account: 'community-account',
+  accounts: 'community-accounts',
   nickname: 'community-nickname',
   avatar: 'community-avatar',
+  email: 'community-email',
   messages: 'community-messages',
   portfolioViews: 'portfolio-view-count',
+};
+
+const normalizeEmail = (value = '') => value.trim().toLowerCase();
+
+const makeUserId = () => {
+  if (typeof crypto !== 'undefined' && crypto.randomUUID) {
+    return crypto.randomUUID();
+  }
+  return `user-${Date.now()}-${Math.random().toString(16).slice(2)}`;
 };
 
 const safeRead = (key, fallback) => {
@@ -43,12 +55,34 @@ const safeReadMessages = () => {
   }
 };
 
+const readCurrentAccount = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.account);
+    return raw ? JSON.parse(raw) : null;
+  } catch (error) {
+    return null;
+  }
+};
+
+const readAccountsMap = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.accounts);
+    const parsed = raw ? JSON.parse(raw) : {};
+    return parsed && typeof parsed === 'object' ? parsed : {};
+  } catch (error) {
+    return {};
+  }
+};
+
 function Community({ isActive = true }) {
-  const [nickname, setNickname] = useState(() => safeRead(STORAGE_KEYS.nickname, 'Guest'));
-  const [selectedAvatar, setSelectedAvatar] = useState(() => safeRead(STORAGE_KEYS.avatar, animeAvatars[0].id));
+  const currentAccount = readCurrentAccount();
+  const [email, setEmail] = useState(() => normalizeEmail(currentAccount?.email || safeRead(STORAGE_KEYS.email, '')));
+  const [nickname, setNickname] = useState(() => currentAccount?.name || safeRead(STORAGE_KEYS.nickname, 'Guest'));
+  const [selectedAvatar, setSelectedAvatar] = useState(() => currentAccount?.avatar || safeRead(STORAGE_KEYS.avatar, animeAvatars[0].id));
   const [messages, setMessages] = useState(() => safeReadMessages());
   const [draft, setDraft] = useState('');
   const [portfolioViews, setPortfolioViews] = useState(() => safeReadNumber(STORAGE_KEYS.portfolioViews, 0));
+  const [accountMessage, setAccountMessage] = useState('');
   const channelRef = useRef(null);
   const messageListRef = useRef(null);
 
@@ -84,13 +118,16 @@ function Community({ isActive = true }) {
       }
 
       if (type === 'profile') {
+        if (payload.email && normalizeEmail(email) !== normalizeEmail(payload.email)) {
+          setEmail(payload.email);
+        }
         if (payload.nickname) setNickname(payload.nickname || 'Guest');
         if (payload.avatar) setSelectedAvatar(payload.avatar);
       }
     };
 
     return () => channel.close();
-  }, []);
+  }, [email]);
 
   useEffect(() => {
     const onStorage = (event) => {
@@ -108,6 +145,10 @@ function Community({ isActive = true }) {
 
       if (event.key === STORAGE_KEYS.avatar && event.newValue) {
         setSelectedAvatar(event.newValue || animeAvatars[0].id);
+      }
+
+      if (event.key === STORAGE_KEYS.email && event.newValue) {
+        setEmail(normalizeEmail(event.newValue));
       }
 
       if (event.key === STORAGE_KEYS.portfolioViews && event.newValue) {
@@ -128,24 +169,52 @@ function Community({ isActive = true }) {
     }
   }, [messages]);
 
-  const saveProfile = (nextAvatar = selectedAvatar) => {
-    const savedNickname = (nickname || '').trim() || 'Guest';
-    const savedAvatar = nextAvatar || animeAvatars[0].id;
+  const persistAccount = (nextEmail = email, nextNickname = nickname, nextAvatar = selectedAvatar) => {
+    const normalizedEmail = normalizeEmail(nextEmail);
+    const safeNickname = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
+    const safeAvatar = nextAvatar || animeAvatars[0].id;
 
-    setNickname(savedNickname);
-    setSelectedAvatar(savedAvatar);
+    if (!normalizedEmail) {
+      setAccountMessage('Please enter an email to save your community account.');
+      return null;
+    }
+
+    const account = {
+      id: currentAccount?.id || makeUserId(),
+      email: normalizedEmail,
+      name: safeNickname,
+      avatar: safeAvatar,
+      updatedAt: new Date().toISOString(),
+    };
+
+    const accounts = readAccountsMap();
+    accounts[normalizedEmail] = account;
 
     try {
-      localStorage.setItem(STORAGE_KEYS.nickname, savedNickname);
-      localStorage.setItem(STORAGE_KEYS.avatar, savedAvatar);
+      localStorage.setItem(STORAGE_KEYS.account, JSON.stringify(account));
+      localStorage.setItem(STORAGE_KEYS.accounts, JSON.stringify(accounts));
+      localStorage.setItem(STORAGE_KEYS.email, normalizedEmail);
+      localStorage.setItem(STORAGE_KEYS.nickname, safeNickname);
+      localStorage.setItem(STORAGE_KEYS.avatar, safeAvatar);
     } catch (error) {
       // Ignore storage issues in private browsing or restricted environments.
     }
 
+    setEmail(normalizedEmail);
+    setNickname(safeNickname);
+    setSelectedAvatar(safeAvatar);
+    setAccountMessage(`Signed in as ${normalizedEmail}`);
+
     channelRef.current?.postMessage({
       type: 'profile',
-      payload: { nickname: savedNickname, avatar: savedAvatar },
+      payload: { email: normalizedEmail, nickname: safeNickname, avatar: safeAvatar },
     });
+
+    return account;
+  };
+
+  const saveProfile = (nextAvatar = selectedAvatar) => {
+    persistAccount(email, nickname, nextAvatar);
   };
 
   const appendMessage = (nextMessage) => {
@@ -164,10 +233,17 @@ function Community({ isActive = true }) {
     const trimmed = draft.trim();
     if (!trimmed) return;
 
+    const activeAccount = persistAccount(email, nickname, selectedAvatar);
+    if (!activeAccount) {
+      return;
+    }
+
     const nextMessage = {
       id: `${Date.now()}-${Math.random().toString(16).slice(2)}`,
-      author: nickname.trim() || 'Guest',
-      avatar: selectedAvatar,
+      email: activeAccount.email,
+      userId: activeAccount.id,
+      author: activeAccount.name,
+      avatar: activeAccount.avatar,
       text: trimmed,
     };
 
@@ -182,6 +258,8 @@ function Community({ isActive = true }) {
       handleSend();
     }
   };
+
+  const isCurrentUserMessage = (message) => normalizeEmail(message.email || '') === normalizeEmail(email);
 
   return (
     <section id="community" className={`page-section ${isActive ? 'active' : ''}`}>
@@ -199,26 +277,41 @@ function Community({ isActive = true }) {
 
         <div className="community-card">
           <div className="community-form">
-            <label className="community-field">
-              <span>Nickname</span>
-              <input
-                type="text"
-                value={nickname}
-                onChange={(event) => setNickname(event.target.value)}
-                placeholder="Enter your nickname"
-                maxLength={18}
-              />
-            </label>
+            <div className="community-field-row">
+              <label className="community-field">
+                <span>Email</span>
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(event) => setEmail(normalizeEmail(event.target.value))}
+                  placeholder="you@example.com"
+                  autoComplete="email"
+                />
+              </label>
+
+              <label className="community-field">
+                <span>Nickname</span>
+                <input
+                  type="text"
+                  value={nickname}
+                  onChange={(event) => setNickname(event.target.value)}
+                  placeholder="Enter your nickname"
+                  maxLength={18}
+                />
+              </label>
+            </div>
 
             <div className="community-save-row">
               <button type="button" className="btn btn-secondary community-save-btn" onClick={saveProfile}>
-                Save
+                Save account
               </button>
 
-              <button type="button" className="btn btn-secondary community-save-profile-btn" onClick={saveProfile}>
+              <button type="button" className="btn btn-secondary community-save-profile-btn" onClick={() => saveProfile(selectedAvatar)}>
                 Save profile
               </button>
             </div>
+
+            {accountMessage ? <div className="community-account-status">{accountMessage}</div> : null}
 
             <div className="community-avatar-picker">
               <span>Anime style avatar</span>
@@ -237,7 +330,6 @@ function Community({ isActive = true }) {
                 ))}
               </div>
             </div>
-
           </div>
 
           <div className="community-chat-box">
@@ -246,14 +338,14 @@ function Community({ isActive = true }) {
                 <img src={selectedAvatarMeta.image} alt={selectedAvatarMeta.label} className="community-preview-avatar" />
                 <div>
                   <strong>{nickname.trim() || 'Guest'}</strong>
-                  <small>online</small>
+                  <small>{email || 'Guest access'}</small>
                 </div>
               </div>
             </div>
 
             <div ref={messageListRef} className="community-message-list">
               {messages.map((message, index) => (
-                <div key={message.id || `${message.author}-${index}`} className="community-message">
+                <div key={message.id || `${message.author}-${index}`} className={`community-message ${isCurrentUserMessage(message) ? 'mine' : ''}`}>
                   <img
                     src={animeAvatars.find((avatar) => avatar.id === message.avatar)?.image || animeAvatars[0].image}
                     alt={animeAvatars.find((avatar) => avatar.id === message.avatar)?.label || 'Avatar'}
@@ -262,6 +354,7 @@ function Community({ isActive = true }) {
                   <div className="community-message-body">
                     <div className="community-message-meta">
                       <span>{message.author}</span>
+                      {message.email ? <small>{message.email}</small> : null}
                     </div>
                     <p>{message.text}</p>
                   </div>

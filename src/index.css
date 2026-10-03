@@ -2026,6 +2026,12 @@ input, textarea {
   width: 100%;
 }
 
+.community-field-row {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.75rem;
+}
+
 .community-field {
   display: flex;
   flex-direction: column;
@@ -2052,6 +2058,17 @@ input, textarea {
 .community-field input:focus {
   outline: none;
   border-color: var(--border-strong);
+}
+
+.community-account-status {
+  border: 1px solid rgba(45, 212, 191, 0.35);
+  background: rgba(45, 212, 191, 0.08);
+  color: #a7f3d0;
+  border-radius: 8px;
+  padding: 0.45rem 0.7rem;
+  font-size: 0.72rem;
+  font-family: var(--font-mono);
+  letter-spacing: 0.04em;
 }
 
 .community-save-btn,
@@ -2180,6 +2197,15 @@ input, textarea {
   gap: 0.7rem;
 }
 
+.community-message.mine {
+  flex-direction: row-reverse;
+}
+
+.community-message.mine .community-message-body {
+  background: rgba(96, 165, 250, 0.08);
+  border-color: rgba(96, 165, 250, 0.45);
+}
+
 .community-message-body {
   flex: 1;
   background: rgba(255,255,255,0.02);
@@ -2193,6 +2219,14 @@ input, textarea {
   color: var(--ink-muted);
   font-size: 0.72rem;
   font-family: var(--font-mono);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.community-message-meta small {
+  color: var(--ink-faint);
 }
 
 .community-message-body p {
