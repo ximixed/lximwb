@@ -10,7 +10,7 @@ const animeAvatars = [
 
 const starterMessages = [
   { id: 'starter-1', author: 'xim', avatar: 'zoro', text: 'Hey! Welcome to the community lounge ✨' },
-  { id: 'starter-2', author: 'ria', avatar: 'naruto', text: 'Drop your nickname and jump in.' },
+  { id: 'starter-2', author: 'xim', avatar: 'naruto', text: 'Drop your nickname and jump in.' },
 ];
 
 const STORAGE_KEYS = {
