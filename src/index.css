@@ -1962,6 +1962,64 @@ input, textarea {
   flex-wrap: wrap;
 }
 
+.community-visitor-panel {
+  border: 1px solid var(--border);
+  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  padding: 0.9rem 1rem;
+}
+
+.community-visitor-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin-bottom: 0.8rem;
+  color: var(--ink-muted);
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.community-visitor-head strong {
+  color: var(--ink);
+  font-size: 0.85rem;
+}
+
+.community-visitor-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+
+.community-visitor-item {
+  display: flex;
+  align-items: center;
+  gap: 0.7rem;
+  padding: 0.6rem 0.7rem;
+  border-radius: 10px;
+  border: 1px solid var(--border);
+  background: var(--bg-subtle);
+}
+
+.community-visitor-item strong {
+  display: block;
+  color: var(--ink);
+  font-size: 0.9rem;
+}
+
+.community-visitor-item small {
+  color: var(--ink-muted);
+  font-size: 0.72rem;
+}
+
+.community-empty-state {
+  color: var(--ink-muted);
+  font-size: 0.82rem;
+  margin: 0;
+}
+
 .community-kicker {
   font-family: var(--font-mono);
   font-size: 0.72rem;

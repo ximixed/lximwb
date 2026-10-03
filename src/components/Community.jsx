@@ -22,6 +22,7 @@ const STORAGE_KEYS = {
   messages: 'community-messages',
   portfolioViews: 'portfolio-view-count',
   portfolioViewTracker: 'portfolio-view-email-tracker',
+  visitors: 'community-visitor-log',
 };
 
 const normalizeEmail = (value = '') => value.trim().toLowerCase();
@@ -85,6 +86,16 @@ const readPortfolioViewTracker = () => {
   }
 };
 
+const readVisitorLog = () => {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEYS.visitors);
+    const parsed = raw ? JSON.parse(raw) : [];
+    return Array.isArray(parsed) ? parsed : [];
+  } catch (error) {
+    return [];
+  }
+};
+
 function Community({ isActive = true }) {
   const currentAccount = readCurrentAccount();
   const [email, setEmail] = useState(() => normalizeEmail(currentAccount?.email || safeRead(STORAGE_KEYS.email, '')));
@@ -93,6 +104,7 @@ function Community({ isActive = true }) {
   const [messages, setMessages] = useState(() => safeReadMessages());
   const [draft, setDraft] = useState('');
   const [portfolioViews, setPortfolioViews] = useState(() => safeReadNumber(STORAGE_KEYS.portfolioViews, 0));
+  const [visitorLog, setVisitorLog] = useState(() => readVisitorLog());
   const [accountMessage, setAccountMessage] = useState('');
   const channelRef = useRef(null);
   const messageListRef = useRef(null);
@@ -212,6 +224,32 @@ function Community({ isActive = true }) {
     }
   }, [messages]);
 
+  const syncVisitorLog = (visitor) => {
+    const nextEmail = normalizeEmail(visitor?.email || '');
+    if (!nextEmail) return;
+
+    const nextName = (visitor?.name || nextEmail.split('@')[0] || 'Visitor').trim() || 'Visitor';
+    const nextAvatar = visitor?.avatar || selectedAvatar || animeAvatars[0].id;
+    const nextEntry = {
+      email: nextEmail,
+      name: nextName,
+      avatar: nextAvatar,
+      viewedAt: new Date().toISOString(),
+    };
+
+    const existingLog = readVisitorLog();
+    const filtered = existingLog.filter((entry) => normalizeEmail(entry.email) !== nextEmail);
+    const updated = [nextEntry, ...filtered].slice(0, 8);
+
+    setVisitorLog(updated);
+
+    try {
+      localStorage.setItem(STORAGE_KEYS.visitors, JSON.stringify(updated));
+    } catch (error) {
+      // Ignore storage issues in private browsing or restricted environments.
+    }
+  };
+
   const persistAccount = (nextEmail = email, nextNickname = nickname, nextAvatar = selectedAvatar) => {
     const normalizedEmail = normalizeEmail(nextEmail);
     const safeNickname = (nextNickname || '').trim() || (normalizedEmail ? normalizedEmail.split('@')[0] : 'Guest');
@@ -247,6 +285,7 @@ function Community({ isActive = true }) {
     setNickname(safeNickname);
     setSelectedAvatar(safeAvatar);
     setAccountMessage(`Signed in as ${normalizedEmail}`);
+    syncVisitorLog({ email: normalizedEmail, name: safeNickname, avatar: safeAvatar });
 
     channelRef.current?.postMessage({
       type: 'profile',
@@ -304,6 +343,12 @@ function Community({ isActive = true }) {
 
   const isCurrentUserMessage = (message) => normalizeEmail(message.email || '') === normalizeEmail(email);
 
+  useEffect(() => {
+    if (email) {
+      syncVisitorLog({ email, name: nickname, avatar: selectedAvatar });
+    }
+  }, [email, nickname, selectedAvatar]);
+
   return (
     <section id="community" className={`page-section ${isActive ? 'active' : ''}`}>
       <div className="community-wrap">
@@ -315,6 +360,33 @@ function Community({ isActive = true }) {
           <div className="community-header-badges">
             <span className="community-live-badge">Live</span>
             <span className="community-view-badge">Views: {portfolioViews}</span>
+          </div>
+        </div>
+
+        <div className="community-visitor-panel">
+          <div className="community-visitor-head">
+            <span>Recent visitors</span>
+            <strong>{visitorLog.length}</strong>
+          </div>
+
+          <div className="community-visitor-list">
+            {visitorLog.length === 0 ? (
+              <p className="community-empty-state">No viewers yet</p>
+            ) : (
+              visitorLog.map((visitor) => (
+                <div key={`${visitor.email}-${visitor.viewedAt}`} className="community-visitor-item">
+                  <img
+                    src={animeAvatars.find((avatar) => avatar.id === visitor.avatar)?.image || animeAvatars[0].image}
+                    alt={visitor.name}
+                    className="community-message-avatar"
+                  />
+                  <div>
+                    <strong>{visitor.name}</strong>
+                    <small>{visitor.email}</small>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
