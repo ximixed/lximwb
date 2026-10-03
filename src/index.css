@@ -2014,7 +2014,7 @@ input, textarea {
   flex-direction: column;
   gap: 1rem;
   padding-right: 0.5rem;
-  align-items: stretch;
+  align-items: flex-start;
   justify-content: flex-start;
 }
 
@@ -2048,15 +2048,16 @@ input, textarea {
 
 .community-save-btn,
 .community-save-profile-btn {
-  align-self: stretch;
+  align-self: flex-start;
   min-height: 30px;
   padding: 0.42rem 0.8rem;
   font-size: 0.76rem;
   line-height: 1.2;
   border-radius: 6px;
-  width: 100%;
+  width: auto;
   max-width: 120px;
   margin: 0;
+  flex-shrink: 0;
 }
 
 .community-save-profile-btn {
