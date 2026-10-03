@@ -48,8 +48,15 @@ function Sidebar({
           onClick={() => onNavigate('home')}
           title="Go to Home"
         >
-          <span className="sidebar-brand-name">Ilsim Sayon</span>
-          <span className="sidebar-brand-sub">Front-End Developer</span>
+          <img
+            src="/pic/pic1.png"
+            alt="Ilsim Sayon"
+            className="sidebar-brand-avatar"
+          />
+          <div className="sidebar-brand-text">
+            <span className="sidebar-brand-name">Ilsim Sayon</span>
+            <span className="sidebar-brand-sub">Front-End Developer</span>
+          </div>
         </button>
       </div>
 
