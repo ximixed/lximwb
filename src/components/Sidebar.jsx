@@ -7,7 +7,6 @@ import {
   Layers,
   Sparkles,
   Mail,
-  Users,
   Compass,
   ArrowUpRight,
   Monitor,
@@ -15,7 +14,6 @@ import {
   Moon,
   Volume2,
   VolumeX,
-  MessageSquare,
   Keyboard,
 } from 'lucide-react';
 
@@ -139,14 +137,6 @@ function Sidebar({
             </div>
             <span className="viewers-count-text">5 people viewing now</span>
           </div>
-
-          <button
-            className="sidebar-community-link"
-            onClick={() => onNavigate('community')}
-          >
-            <MessageSquare size={13} strokeWidth={2} />
-            <span>community chat</span>
-          </button>
         </div>
 
         {/* Bryl Lim style Toggle Button Row: [ Monitor | Sun | Moon ] and [ Volume ] */}

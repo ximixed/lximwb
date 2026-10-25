@@ -34,7 +34,6 @@ function Header({
     { id: 'projects', label: 'Projects', icon: Briefcase },
     { id: 'profile', label: 'Profile', icon: UserCircle },
     { id: 'contact', label: 'Contact', icon: Mail },
-    { id: 'community', label: 'Community', icon: UserCircle },
     { id: 'games', label: 'Games', icon: Gamepad2 },
     { id: 'shop', label: 'Shop', icon: ShoppingBag },
   ];
