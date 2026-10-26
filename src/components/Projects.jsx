@@ -1,8 +1,15 @@
-import { Briefcase, ShoppingCart, ArrowUpRight } from 'lucide-react';
+import { Briefcase, ShoppingCart, ArrowUpRight, CalendarDays } from 'lucide-react';
 import { TbFoodsteps } from 'react-icons/tb';
 
 function Projects({ isActive = true }) {
   const projects = [
+    {
+      title: 'Daily Planner',
+      description: 'A deployed productivity website for daily planning, task tracking, and personal organization.',
+      tags: ['React', 'Productivity', 'Responsive Design'],
+      link: 'https://dailyplanner-amber-chi.vercel.app/',
+      Icon: CalendarDays,
+    },
     {
       title: 'SAYON STORE',
       description: 'A responsive tech storefront with product search, cart management, checkout, and PHP API integration.',
