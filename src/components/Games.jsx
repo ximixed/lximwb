@@ -1182,6 +1182,56 @@ function DiceBattleGame() {
   );
 }
 
+function TwoPlayerGamesPortal() {
+  const openPortal = () => {
+    window.open('https://www.twoplayergames.org/', '_blank', 'noopener,noreferrer');
+  };
+
+  return (
+    <div className="game-card external-game-card">
+      <div className="game-card-header">
+        <div>
+          <h3 className="game-title">🎮 Two Player Games</h3>
+          <p className="game-subtitle">Arcade, racing, puzzle, and sports games in one portal.</p>
+        </div>
+        <div className="game-scores">
+          <span className="game-score-item"><Zap size={13} /> Portal</span>
+          <span className="game-score-item"><Trophy size={13} /> 2P</span>
+        </div>
+      </div>
+
+      <div className="external-game-preview">
+        <div className="external-game-badge">2P</div>
+        <div className="external-game-tags">
+          <span>Racing</span>
+          <span>Sports</span>
+          <span>Puzzle</span>
+          <span>Action</span>
+        </div>
+        <p className="external-game-copy">
+          Jump into a large collection of quick browser games with competitive two-player action, classic challenges, and instant play.
+        </p>
+      </div>
+
+      <div className="external-game-actions">
+        <button className="btn btn-primary" onClick={openPortal}>Open site</button>
+        <a
+          href="https://www.twoplayergames.org/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="btn btn-secondary"
+        >
+          Play now
+        </a>
+      </div>
+
+      <div className="game-controls-hint">
+        <span>External game portal · opens in a new tab</span>
+      </div>
+    </div>
+  );
+}
+
 function Games({ isActive = true }) {
   return (
     <section id="games" className={`page-section ${isActive ? "active" : ""}`}>
@@ -1191,7 +1241,7 @@ function Games({ isActive = true }) {
           <h2 className="games-page-title">Mini Games</h2>
         </div>
         <p className="games-subtitle">
-          Take a break — eight games with built-in guides. Use the on-screen buttons or keyboard.
+          Take a break — eight games with built-in guides plus a playable external two-player portal.
         </p>
       </div>
       <div className="games-grid">
@@ -1203,6 +1253,7 @@ function Games({ isActive = true }) {
         <RpsGame />
         <NumberGuessGame />
         <DiceBattleGame />
+        <TwoPlayerGamesPortal />
       </div>
     </section>
   );

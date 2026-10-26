@@ -1065,10 +1065,11 @@ input, textarea {
 }
 
 .project-card.daily-planner-preview .project-index,
-.project-card.daily-planner-preview .project-card h3,
-.project-card.daily-planner-preview .project-card p,
+.project-card.daily-planner-preview h3,
+.project-card.daily-planner-preview p,
 .project-card.daily-planner-preview .project-tag,
-.project-card.daily-planner-preview .project-icon-badge {
+.project-card.daily-planner-preview .project-icon-badge,
+.project-card.daily-planner-preview .project-btn {
   color: #f5f7ff;
 }
 
@@ -1086,6 +1087,7 @@ input, textarea {
 .project-card.daily-planner-preview .project-btn {
   background: rgba(31, 61, 174, 0.9);
   border-color: rgba(255, 255, 255, 0.18);
+  color: #ffffff;
 }
 
 .project-card:hover {
@@ -2611,6 +2613,70 @@ input, textarea {
   border-top: 1px solid var(--border-subtle);
   font-size: 0.75rem;
   color: var(--ink-muted);
+}
+
+.external-game-card {
+  background: linear-gradient(135deg, rgba(31, 61, 174, 0.08), rgba(14, 116, 144, 0.06));
+}
+
+.external-game-preview {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  min-height: 200px;
+  justify-content: center;
+  background:
+    radial-gradient(circle at top left, rgba(55, 110, 255, 0.18), transparent 38%),
+    linear-gradient(180deg, rgba(255,255,255,0.02), rgba(15,23,42,0.05));
+}
+
+.external-game-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 66px;
+  height: 66px;
+  border-radius: 18px;
+  background: linear-gradient(135deg, #1f4fe8, #2f7ff5);
+  color: #fff;
+  font-weight: 800;
+  font-size: 1.2rem;
+  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.25);
+}
+
+.external-game-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.55rem;
+}
+
+.external-game-tags span {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid var(--border);
+  border-radius: 999px;
+  padding: 0.38rem 0.7rem;
+  font-size: 0.72rem;
+  color: var(--ink);
+}
+
+.external-game-copy {
+  margin: 0;
+  color: var(--ink-secondary);
+  line-height: 1.6;
+  font-size: 0.88rem;
+}
+
+.external-game-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+  padding: 0 1.25rem 1rem;
+}
+
+.external-game-actions .btn {
+  flex: 1 1 140px;
+  justify-content: center;
 }
 
 .game-hint-btns {
