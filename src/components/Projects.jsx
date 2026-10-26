@@ -1,5 +1,4 @@
-import { Briefcase, ShoppingCart, ArrowUpRight, CalendarDays } from 'lucide-react';
-import { TbFoodsteps } from 'react-icons/tb';
+import { Briefcase, ArrowUpRight, CalendarDays, ShoppingBag } from 'lucide-react';
 
 function Projects({ isActive = true }) {
   const projects = [
@@ -12,18 +11,12 @@ function Projects({ isActive = true }) {
       previewClass: 'daily-planner-preview',
     },
     {
-      title: 'SAYON STORE',
-      description: 'A responsive tech storefront with product search, cart management, checkout, and PHP API integration.',
-      tags: ['React', 'PHP API', 'Responsive Design'],
-      link: 'https://github.com/ximixed/ilsimmvcproject',
-      Icon: ShoppingCart,
-    },
-    {
-      title: 'Xim Foods',
-      description: 'This Project is Coming Soon.',
-      tags: ['UI/UX', 'Responsive Design', 'Mobile'],
-      link: '#',
-      Icon: TbFoodsteps,
+      title: 'Gshops',
+      description: 'A storefront landing page for SAYON STORE, built for tech product browsing, shopping cart flow, and simple e-commerce browsing.',
+      tags: ['E-commerce', 'React', 'Responsive UI'],
+      link: 'https://gshops.vercel.app/',
+      Icon: ShoppingBag,
+      previewClass: 'gshops-preview',
     },
   ];
 
@@ -59,7 +52,7 @@ function Projects({ isActive = true }) {
               </div>
             )}
             <a href={project.link} className="btn btn-primary project-btn">
-              View Details
+              View Project
               <ArrowUpRight size={15} strokeWidth={2} />
             </a>
           </div>

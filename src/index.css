@@ -1042,8 +1042,8 @@ input, textarea {
   transition: all 0.2s ease;
 }
 
-.project-card.daily-planner-preview {
-  background-image: linear-gradient(rgba(11, 18, 32, 0.2), rgba(11, 18, 32, 0.35)), url('/daily-planner-preview.svg');
+.project-card.daily-planner-preview,
+.project-card.gshops-preview {
   background-size: cover;
   background-position: center;
   border-color: rgba(65, 90, 140, 0.25);
@@ -1051,7 +1051,16 @@ input, textarea {
   min-height: 320px;
 }
 
-.project-card.daily-planner-preview::before {
+.project-card.daily-planner-preview {
+  background-image: linear-gradient(rgba(11, 18, 32, 0.2), rgba(11, 18, 32, 0.35)), url('/daily-planner-preview.svg');
+}
+
+.project-card.gshops-preview {
+  background-image: linear-gradient(rgba(12, 16, 27, 0.18), rgba(12, 16, 27, 0.42)), url('/gshops-preview.svg');
+}
+
+.project-card.daily-planner-preview::before,
+.project-card.gshops-preview::before {
   content: "";
   position: absolute;
   inset: 0;
@@ -1059,7 +1068,8 @@ input, textarea {
   pointer-events: none;
 }
 
-.project-card.daily-planner-preview > * {
+.project-card.daily-planner-preview > *,
+.project-card.gshops-preview > * {
   position: relative;
   z-index: 1;
 }
@@ -1069,22 +1079,31 @@ input, textarea {
 .project-card.daily-planner-preview p,
 .project-card.daily-planner-preview .project-tag,
 .project-card.daily-planner-preview .project-icon-badge,
-.project-card.daily-planner-preview .project-btn {
+.project-card.daily-planner-preview .project-btn,
+.project-card.gshops-preview .project-index,
+.project-card.gshops-preview h3,
+.project-card.gshops-preview p,
+.project-card.gshops-preview .project-tag,
+.project-card.gshops-preview .project-icon-badge,
+.project-card.gshops-preview .project-btn {
   color: #f5f7ff;
 }
 
-.project-card.daily-planner-preview .project-icon-badge {
+.project-card.daily-planner-preview .project-icon-badge,
+.project-card.gshops-preview .project-icon-badge {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.2);
   backdrop-filter: blur(6px);
 }
 
-.project-card.daily-planner-preview .project-tag {
+.project-card.daily-planner-preview .project-tag,
+.project-card.gshops-preview .project-tag {
   background: rgba(255, 255, 255, 0.12);
   border-color: rgba(255, 255, 255, 0.15);
 }
 
-.project-card.daily-planner-preview .project-btn {
+.project-card.daily-planner-preview .project-btn,
+.project-card.gshops-preview .project-btn {
   background: rgba(31, 61, 174, 0.9);
   border-color: rgba(255, 255, 255, 0.18);
   color: #ffffff;
