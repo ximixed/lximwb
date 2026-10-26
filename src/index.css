@@ -1042,6 +1042,52 @@ input, textarea {
   transition: all 0.2s ease;
 }
 
+.project-card.daily-planner-preview {
+  background-image: linear-gradient(rgba(11, 18, 32, 0.2), rgba(11, 18, 32, 0.35)), url('/daily-planner-preview.svg');
+  background-size: cover;
+  background-position: center;
+  border-color: rgba(65, 90, 140, 0.25);
+  overflow: hidden;
+  min-height: 320px;
+}
+
+.project-card.daily-planner-preview::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(18, 25, 41, 0.1) 0%, rgba(18, 25, 41, 0.48) 100%);
+  pointer-events: none;
+}
+
+.project-card.daily-planner-preview > * {
+  position: relative;
+  z-index: 1;
+}
+
+.project-card.daily-planner-preview .project-index,
+.project-card.daily-planner-preview .project-card h3,
+.project-card.daily-planner-preview .project-card p,
+.project-card.daily-planner-preview .project-tag,
+.project-card.daily-planner-preview .project-icon-badge {
+  color: #f5f7ff;
+}
+
+.project-card.daily-planner-preview .project-icon-badge {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(6px);
+}
+
+.project-card.daily-planner-preview .project-tag {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.project-card.daily-planner-preview .project-btn {
+  background: rgba(31, 61, 174, 0.9);
+  border-color: rgba(255, 255, 255, 0.18);
+}
+
 .project-card:hover {
   border-color: var(--ink);
   transform: translateY(-2px);

@@ -1,0 +1,117 @@
+<svg width="1200" height="820" viewBox="0 0 1200 820" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <rect width="1200" height="820" rx="28" fill="#EAF1F8"/>
+  <rect x="0" y="0" width="260" height="820" rx="28" fill="#F4F7FB" stroke="#D8E1ED"/>
+  <rect x="20" y="20" width="220" height="90" rx="18" fill="#F8FAFC" stroke="#D8E1ED"/>
+  <circle cx="60" cy="60" r="24" fill="#1F2D5A"/>
+  <path d="M46 60C52 52 58 48 67 48C78 48 86 52 92 60C88 69 79 75 67 75C54 75 47 69 46 60Z" fill="#F9FAFF" fill-opacity="0.86"/>
+  <rect x="32" y="115" width="180" height="40" rx="12" fill="#E8EDF6"/>
+  <rect x="32" y="175" width="166" height="30" rx="10" fill="#F7F9FC"/>
+  <rect x="32" y="225" width="190" height="32" rx="10" fill="#F7F9FC"/>
+  <rect x="32" y="278" width="175" height="30" rx="10" fill="#F7F9FC"/>
+  <rect x="32" y="330" width="182" height="32" rx="10" fill="#F7F9FC"/>
+  <rect x="32" y="387" width="200" height="70" rx="14" fill="#EAF1FA"/>
+  <rect x="40" y="397" width="90" height="22" rx="7" fill="#DDE9F7"/>
+  <rect x="40" y="425" width="110" height="16" rx="8" fill="#DDE9F7"/>
+  <rect x="32" y="488" width="190" height="84" rx="16" fill="#EEF4FA"/>
+  <rect x="40" y="510" width="98" height="22" rx="7" fill="#DDE9F7"/>
+  <rect x="40" y="540" width="130" height="16" rx="8" fill="#DDE9F7"/>
+
+  <rect x="280" y="30" width="900" height="760" rx="26" fill="#F5F7FB" stroke="#D9E2EE"/>
+  <text x="320" y="85" fill="#111827" font-family="Segoe UI, Arial, sans-serif" font-size="48" font-weight="700">Today</text>
+  <text x="320" y="125" fill="#5F6E85" font-family="Segoe UI, Arial, sans-serif" font-size="22">Monday, October 26, 2026</text>
+
+  <g transform="translate(770 32)">
+    <rect x="0" y="0" width="180" height="40" rx="12" fill="#EBF0F8"/>
+    <text x="20" y="26" fill="#46566F" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="600">TIME</text>
+    <text x="86" y="26" fill="#2C3D60" font-family="Segoe UI, Arial, sans-serif" font-size="20" font-weight="700">11:33 PM</text>
+    <rect x="170" y="4" width="30" height="30" rx="8" fill="#F3F6FB"/>
+    <path d="M183 17L188 22L197 13" stroke="#57677D" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+  </g>
+
+  <g transform="translate(930 32)">
+    <rect x="0" y="0" width="120" height="42" rx="12" fill="#EAF1FC"/>
+    <text x="34" y="27" fill="#4E69E0" font-family="Segoe UI, Arial, sans-serif" font-size="18" font-weight="700">Today</text>
+  </g>
+
+  <g transform="translate(1048 28)">
+    <rect x="0" y="0" width="78" height="50" rx="14" fill="#DFEAFB"/>
+    <circle cx="24" cy="25" r="11" fill="#6A7FA9" fill-opacity="0.15"/>
+    <circle cx="54" cy="25" r="11" fill="#6A7FA9" fill-opacity="0.15"/>
+    <path d="M17 25H31M44 25H58" stroke="#3F4E6E" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <g transform="translate(310 170)">
+    <rect x="0" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="24" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Sun</text>
+    <text x="54" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">25</text>
+
+    <rect x="160" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="184" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Mon</text>
+    <text x="214" y="68" fill="#FFFFFF" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">26</text>
+    <rect x="160" y="0" width="150" height="90" rx="18" fill="url(#blueGrad)"/>
+
+    <rect x="320" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="344" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Tue</text>
+    <text x="374" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">27</text>
+
+    <rect x="480" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="504" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Wed</text>
+    <text x="534" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">28</text>
+
+    <rect x="640" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="664" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Thu</text>
+    <text x="694" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">29</text>
+
+    <rect x="800" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="824" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Fri</text>
+    <text x="854" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">30</text>
+
+    <rect x="960" y="0" width="150" height="90" rx="18" fill="#F7F9FC" stroke="#DEE6F2"/>
+    <text x="984" y="34" fill="#6B7B92" font-family="Segoe UI, Arial, sans-serif" font-size="16">Sat</text>
+    <text x="1014" y="68" fill="#1A2438" font-family="Segoe UI, Arial, sans-serif" font-size="30" font-weight="700">31</text>
+  </g>
+
+  <rect x="310" y="290" width="830" height="72" rx="14" fill="#F3F7FB"/>
+  <text x="340" y="333" fill="#5F6E85" font-family="Segoe UI, Arial, sans-serif" font-size="20">No tasks planned for this day.</text>
+
+  <g transform="translate(310 394)">
+    <rect x="0" y="0" width="190" height="120" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="20" y="34" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="1.2">TOTAL TASKS</text>
+    <text x="20" y="82" fill="#202B3D" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">0</text>
+    <text x="20" y="104" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14">0 completed</text>
+
+    <rect x="210" y="0" width="190" height="120" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="230" y="34" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="1.2">COMPLETED</text>
+    <text x="230" y="82" fill="#202B3D" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">0</text>
+    <text x="230" y="104" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14">0% of day</text>
+
+    <rect x="420" y="0" width="190" height="120" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="440" y="34" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="1.2">ACTIVITIES</text>
+    <text x="440" y="82" fill="#202B3D" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">0</text>
+    <text x="440" y="104" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14">scheduled</text>
+
+    <rect x="630" y="0" width="190" height="120" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="650" y="34" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14" letter-spacing="1.2">NOTES</text>
+    <text x="650" y="82" fill="#202B3D" font-family="Segoe UI, Arial, sans-serif" font-size="40" font-weight="700">0</text>
+    <text x="650" y="104" fill="#6D7D92" font-family="Segoe UI, Arial, sans-serif" font-size="14">saved today</text>
+  </g>
+
+  <g transform="translate(310 536)">
+    <rect x="0" y="0" width="390" height="142" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="28" y="40" fill="#1E2A3A" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Daily focus</text>
+    <rect x="28" y="58" width="330" height="52" rx="12" fill="#F0F4FB"/>
+    <text x="50" y="90" fill="#6E7D93" font-family="Segoe UI, Arial, sans-serif" font-size="24">No active priorities yet.</text>
+
+    <rect x="420" y="0" width="390" height="142" rx="18" fill="#F7F9FC" stroke="#DDE5F0"/>
+    <text x="448" y="40" fill="#1E2A3A" font-family="Segoe UI, Arial, sans-serif" font-size="28" font-weight="700">Upcoming schedule</text>
+    <rect x="448" y="58" width="330" height="52" rx="12" fill="#F0F4FB"/>
+    <text x="470" y="90" fill="#6E7D93" font-family="Segoe UI, Arial, sans-serif" font-size="24">No upcoming activities.</text>
+  </g>
+
+  <defs>
+    <linearGradient id="blueGrad" x1="160" y1="0" x2="310" y2="90" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#1E5AF2"/>
+      <stop offset="1" stop-color="#1839C9"/>
+    </linearGradient>
+  </defs>
+</svg>

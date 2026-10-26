@@ -9,6 +9,7 @@ function Projects({ isActive = true }) {
       tags: ['React', 'Productivity', 'Responsive Design'],
       link: 'https://dailyplanner-amber-chi.vercel.app/',
       Icon: CalendarDays,
+      previewClass: 'daily-planner-preview',
     },
     {
       title: 'SAYON STORE',
@@ -36,7 +37,10 @@ function Projects({ isActive = true }) {
       </div>
       <div className="project-grid">
         {projects.map((project, index) => (
-          <div className="project-card" key={index}>
+          <div
+            className={`project-card ${project.previewClass || ''}`}
+            key={index}
+          >
             <span className="project-index">No. {String(index + 1).padStart(2, '0')}</span>
             <div className="project-card-top">
               <span className="project-icon-badge">
